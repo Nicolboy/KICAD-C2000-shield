@@ -1,0 +1,18 @@
+# Fichiers de sauvegarde automatiques
+*.kicad_sch-bak
+*.kicad_pcb-bak
+*.sch-bak
+*.pcb-bak
+
+# Fichiers de verrouillage (lock files)
+.#*
+
+# Dossiers générés pour les fabrications ou les tracés
+/plt/
+/gerber/
+/fab/
+
+# Fichiers temporaires du système d'exploitation
+.DS_Store
+Thumbs.db
+*~
