@@ -1,0 +1,4 @@
+(sym_lib_table
+  (version 7)
+  (lib (name "shield")(type "KiCad")(uri "${KIPRJMOD}/build/CONN_C2000_2x24.kicad_sym")(options "")(descr "Connecteur genere"))
+)

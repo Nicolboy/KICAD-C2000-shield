@@ -1,0 +1,9 @@
+Rapport de verification — connecteur_gen 1.0
+====================================================
+
+[info   ] 48 positions, 14 masses
+[info   ] 11 voies ADC simples (besoin du shield : 7, marge 4)
+[info   ] broches du MCU exportees : 1, 2, 3, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 18, 19, 25, 31, 33, 34, 41, 42, 47, 48, 49, 50, 51, 52, 56, 57, 61, 63, 64
+
+0 erreur(s), 0 attention(s).
+RESULTAT : OK
