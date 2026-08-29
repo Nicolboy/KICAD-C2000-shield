@@ -1,0 +1,5 @@
+.venv/
+*.kicad_prl
+*-backups/
+fp-info-cache
+.history/
