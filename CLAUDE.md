@@ -57,6 +57,12 @@ sans décision explicite de ma part.
    sur watchdog et brownout. Jamais de sortie push-pull côté shield.
 5. **Point de jonction VSS/VSSA unique**, près du boîtier, une seule masse au
    connecteur.
+6. **GND et +5V restent en `power_in`, avec un PWR_FLAG par net.** Le
+   connecteur alimente bien la carte, mais le brochage les décrit en entrée et
+   c'est lui qui fait autorité. Un net qui n'a que des `power_in` fait lever
+   `power_pin_not_driven` à l'ERC, même avec un symbole de masse dessus : le
+   PWR_FLAG répond à ça sans toucher au type électrique des broches. Ne pas
+   les passer en `power_out` pour supprimer les flags.
 
 ## Deux variantes de PCB
 
