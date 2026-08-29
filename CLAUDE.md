@@ -1,5 +1,7 @@
 # Projet PCB — KiCad 10, Windows
 
+cle github: ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIE4f3+cYDYeS9AhdrAqW053Hjwf6gioSQ3DBR904tEx9 contact@nicolasboyer.fr (github dans le dossier.ssh)
+
 ## Environnement
 - KiCad 10 doit être OUVERT avec le projet chargé. L'API IPC ne marche
   pas en headless sur cette version.

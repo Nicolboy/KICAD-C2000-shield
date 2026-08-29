@@ -64,16 +64,159 @@ def indent(block, level):
     return "\n".join(pad + ln if ln else ln for ln in block.splitlines())
 
 
+POWER_LIB = Path(
+    r"C:\Program Files\KiCad\10.0\share\kicad\symbols\power.kicad_sym"
+)
+
+PIN_RE = re.compile(
+    r'\(pin\s+\S+\s+\S+\s+\(at\s+(-?[\d.]+)\s+(-?[\d.]+)\s+(\d+)\)'
+    r'.*?\(name\s+"([^"]+)"'
+    r'.*?\(number\s+"([^"]+)"',
+    re.S,
+)
+
+# Longueur du fil qui relie la broche a son symbole d'alimentation.
+STUB = 5.08
+
+
+def parse_pins(block):
+    """[(numero, nom, x, y, angle)] en coordonnees symbole."""
+    out = []
+    for m in PIN_RE.finditer(block):
+        x, y, ang, name, num = m.groups()
+        out.append((num, name, float(x), float(y), int(ang)))
+    return out
+
+
+def extract_from(path, name):
+    """Extrait un bloc symbole d'une librairie, prefixe par sa lib."""
+    text = Path(path).read_text(encoding="utf-8")
+    start = text.index('(symbol "%s"' % name)
+    depth = 0
+    for i in range(start, len(text)):
+        if text[i] == "(":
+            depth += 1
+        elif text[i] == ")":
+            depth -= 1
+            if depth == 0:
+                block = text[start : i + 1]
+                return block.replace(
+                    '(symbol "%s"' % name, '(symbol "power:%s"' % name, 1
+                )
+    raise ValueError("bloc symbole %s non termine" % name)
+
+
+def wire(x0, y0, x1, y1):
+    return (
+        '\t(wire (pts (xy %.2f %.2f) (xy %.2f %.2f))\n'
+        '\t\t(stroke (width 0) (type default)) (uuid "%s")\n\t)'
+        % (x0, y0, x1, y1, uid())
+    )
+
+
+def pwr_symbol(name, ref, x, y, rot, sch_uuid, show_value=True, direction=1):
+    """Instance d'un symbole de la librairie power, pin en (x, y)."""
+    value = (
+        '\t\t(property "Value" "%s" (at %.2f %.2f %d) (effects (font (size 1.27 1.27))))\n'
+        % (name, x + direction * 3.81, y, rot)
+        if show_value
+        else '\t\t(property "Value" "%s" (at %.2f %.2f 0) (hide yes) (effects (font (size 1.27 1.27))))\n'
+        % (name, x, y)
+    )
+    return (
+        '\t(symbol\n'
+        '\t\t(lib_id "power:%s")\n'
+        '\t\t(at %.2f %.2f %d)\n'
+        '\t\t(unit 1)\n'
+        '\t\t(exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)\n'
+        '\t\t(uuid "%s")\n'
+        '\t\t(property "Reference" "%s" (at %.2f %.2f 0) (hide yes) (effects (font (size 1.27 1.27))))\n'
+        '%s'
+        '\t\t(pin "1" (uuid "%s"))\n'
+        '\t\t(instances\n'
+        '\t\t\t(project "projet"\n'
+        '\t\t\t\t(path "/%s" (reference "%s") (unit 1))\n'
+        '\t\t\t)\n'
+        '\t\t)\n'
+        '\t)'
+        % (name, x, y, rot, uid(), ref, x, y - 6.35, value, uid(), sch_uuid, ref)
+    )
+
+
+def gen_power(pins, at_x, at_y, sch_uuid):
+    """Fils + symboles d'alimentation sur chaque broche GND et +5V.
+
+    La broche est en (at_x + px, at_y - py) : l'axe Y du schema est inverse
+    par rapport a celui du symbole. Un fil horizontal de STUB part vers
+    l'exterieur du boitier, le symbole d'alimentation est pose au bout.
+    """
+    items, insts, n = [], [], 0
+    flagged = set()
+    for num, name, px, py, ang in pins:
+        if name not in ("GND", "+5V"):
+            continue
+        n += 1
+        # angle 0 : broche a gauche, le fil part vers -X. angle 180 : vers +X.
+        direction = -1 if ang == 0 else 1
+        x0 = at_x + px
+        y0 = at_y - py
+
+        # J1 declare GND et +5V en power_in : sans source power_out sur le
+        # net, l'ERC leve power_pin_not_driven. Le connecteur est bien la
+        # source d'alimentation de la carte, mais le brochage — qui fait
+        # autorite — le decrit en entree. Un PWR_FLAG le dit a l'ERC sans
+        # toucher au type electrique des broches. Un seul par net suffit :
+        # pose sur la premiere broche rencontree, au milieu d'un stub double,
+        # le symbole d'alimentation restant au bout.
+        first = name not in flagged
+        flagged.add(name)
+        x1 = x0 + direction * (STUB * 2 if first else STUB)
+        if first:
+            # Le stub est coupe en deux au point du flag : un pin pose au
+            # milieu d'un fil continu ne se connecte pas, il lui faut une
+            # extremite de segment et une jonction.
+            xm = x0 + direction * STUB
+            items.append(wire(x0, y0, xm, y0))
+            items.append(wire(xm, y0, x1, y0))
+            items.append(
+                '\t(junction (at %.2f %.2f) (diameter 0) (color 0 0 0 0)'
+                ' (uuid "%s"))' % (xm, y0, uid())
+            )
+            items.append(
+                pwr_symbol(
+                    "PWR_FLAG", "#FLG%02d" % n, xm, y0, 0, sch_uuid,
+                    show_value=False,
+                )
+            )
+        else:
+            items.append(wire(x0, y0, x1, y0))
+        ref = "#PWR%02d" % n
+        rot = 270 if direction < 0 else 90
+        items.append(
+            pwr_symbol(name, ref, x1, y0, rot, sch_uuid, direction=direction)
+        )
+        insts.append(ref)
+    return items, insts
+
+
 def gen_sch(sym_block, ref="J1"):
     sch_uuid = uid()
     sym_uuid = uid()
     # Le symbole est dessine centre sur son origine ; on le pose sur la feuille.
-    at_x, at_y = 120.0, 100.0
+    # Multiples de 1,27 mm : sinon toutes les extremites de fil tombent hors
+    # grille et l'ERC leve endpoint_off_grid sur chacune.
+    at_x, at_y = 127.0, 101.6
 
     pins = re.findall(r'\(number "([^"]+)"', sym_block)
     pin_uuids = "\n".join(
         '\t\t\t(pin "%s" (uuid "%s"))' % (n, uid()) for n in pins
     )
+
+    # Alimentations : un symbole power par broche GND et +5V du connecteur.
+    pwr_lib = "\n".join(
+        extract_from(POWER_LIB, n) for n in ("GND", "+5V", "PWR_FLAG")
+    )
+    pwr_items, _ = gen_power(parse_pins(sym_block), at_x, at_y, sch_uuid)
 
     return """(kicad_sch
 \t(version 20241209)
@@ -107,13 +250,14 @@ def gen_sch(sym_block, ref="J1"):
 \t\t\t)
 \t\t)
 \t)
+%s
 \t(sheet_instances
 \t\t(path "/" (page "1"))
 \t)
 )
 """ % (
         sch_uuid,
-        indent(sym_block, 2),
+        indent(sym_block, 2) + "\n" + indent(pwr_lib, 2),
         LIB_NICK,
         SYM_NAME,
         at_x,
@@ -130,6 +274,7 @@ def gen_sch(sym_block, ref="J1"):
         pin_uuids,
         sch_uuid,
         ref,
+        "\n".join(pwr_items),
     )
 
 
