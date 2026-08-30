@@ -1,0 +1,33 @@
+position,broche_ESP32-C6-DevKitC-1,signal_projet,note
+J1-1,3V3,sortie du LDO de la carte,ne pas alimenter depuis le shield
+J1-2,RST,reset de l'ESP32,"bouton local, non exporte"
+J1-3,GPIO4 / MTMS,libre,broche de strapping - sortie seulement apres boot
+J1-4,GPIO5 / MTDI,libre,broche de strapping
+J1-5,GPIO6,OLED_SCK,FSPICLK natif
+J1-6,GPIO7,OLED_MOSI,FSPID natif
+J1-7,GPIO0,reserve,
+J1-8,GPIO1,reserve,
+J1-9,GPIO8,LED RGB de la carte,strapping - eviter
+J1-10,GPIO10,TMS_RXD,sortie ESP vers UART_RX du C2000
+J1-11,GPIO11,TMS_TXD,entree ESP depuis UART_TX du C2000
+J1-12,GPIO2,TMS_BOOT_SEL,"1 = Flash, 0 = boot SCI ROM"
+J1-13,GPIO3,TMS_nRESET,drain ouvert imperatif
+J1-14,+5V,alimentation depuis le shield,voir note OR-ing
+J1-15,GND,masse,
+J1-16,NC,,
+J3-1,GND,masse,
+J3-2,GPIO16 / U0TXD,console,occupe par le pont USB-UART
+J3-3,GPIO17 / U0RXD,console,occupe par le pont USB-UART
+J3-4,GPIO15,libre,broche de strapping
+J3-5,GPIO23,reserve,
+J3-6,GPIO22,reserve,
+J3-7,GPIO21,reserve,
+J3-8,GPIO20,OLED_RST,
+J3-9,GPIO19,OLED_DC,
+J3-10,GPIO18,OLED_CS,FSPICS2
+J3-11,GPIO9,libre,broche de strapping
+J3-12,GND,masse,
+J3-13,GPIO13 / USB_D+,USB natif,JTAG par USB - ne pas utiliser
+J3-14,GPIO12 / USB_D-,USB natif,JTAG par USB - ne pas utiliser
+J3-15,GND,masse,
+J3-16,NC,,

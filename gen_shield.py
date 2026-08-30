@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Genere le projet KiCad du shield depuis les symboles de lib/.
 
-Source : doc/brochage-devkit.md (rangee A de 24, rangee B de 32,
-quatre nappes 2 x 8, alimentation sur connecteur separe) et les deux
-librairie lib/C2000_Devkit_Connectors.kicad_sym.
+Source : doc/brochage-devkit.md, doc/README-lib.md et doc/README-esp32.md.
+Deux rangees devkit de 28 positions, quatre nappes 2 x 8, alimentation sur
+connecteur separe, et les deux embases 1 x 16 de l'ESP32-C6-DevKitC-1.
 
 Le schema pose les connecteurs et cable les deux nets d'alimentation. Le
 routage des signaux n'est pas fait ici : il demande des choix de conception
@@ -21,26 +21,41 @@ import kicad_gen as pg
 
 IMPORTS = Path("imports")
 LIBDIR = Path("lib")
-CONN_LIB = LIBDIR / "C2000_Devkit_Connectors.kicad_sym"
-LIB_NICK = "C2000_Devkit_Connectors"
 
-# Carte A3 : sept connecteurs dont un 1 x 32 ne tiennent pas au propre sur A4.
-PAPER = "A3"
+# Une librairie par famille de connecteurs, chacune avec son nickname.
+LIBS = {
+    "C2000_Devkit_Connectors": LIBDIR / "C2000_Devkit_Connectors.kicad_sym",
+    "ESP32_C6_Devkit": LIBDIR / "ESP32_C6_Devkit.kicad_sym",
+}
+
+# Carte A2 : dix connecteurs, dont deux rangees de 28 et les deux embases de
+# l'ESP32, ne tiennent pas sur A3.
+PAPER = "A2"
 
 # Nom du projet, repris dans les instances de chaque symbole.
 PROJECT = "shield"
 
-# (symbole, reference, x, y) — multiples de 1,27 mm, sinon les extremites de
-# fil tombent hors grille et l'ERC leve endpoint_off_grid sur chacune.
+# (librairie, symbole, reference, x, y) — coordonnees multiples de 1,27 mm,
+# sinon les extremites de fil tombent hors grille et l'ERC leve
+# endpoint_off_grid sur chacune.
+#
+# J9 et J10 sont les deux supports 1 x 16 qui recoivent l'ESP32-C6-DevKitC-1
+# directement, sans carte intermediaire (cf. doc/README-lib.md, "Montage sur
+# le shield").
+C2000 = "C2000_Devkit_Connectors"
+ESP32 = "ESP32_C6_Devkit"
+
 PLACEMENT = [
-    ("DEVKIT_C2000_ROW_A", "J1", 76.2, 116.84),
-    ("DEVKIT_C2000_ROW_B", "J2", 177.8, 116.84),
-    ("NAPPE_ADC1", "J3", 279.4, 63.5),
-    ("NAPPE_ADC2", "J4", 279.4, 139.7),
-    ("NAPPE_PWM", "J5", 279.4, 215.9),
-    ("NAPPE_GPIO", "J6", 375.92, 63.5),
-    ("ALIM_5V", "J7", 375.92, 139.7),
-    ("ALIM_5V", "J8", 375.92, 177.8),
+    (C2000, "DEVKIT_C2000_ROW_A", "J1", 76.2, 116.84),
+    (C2000, "DEVKIT_C2000_ROW_B", "J2", 177.8, 116.84),
+    (C2000, "NAPPE_ADC1", "J3", 279.4, 63.5),
+    (C2000, "NAPPE_ADC2", "J4", 279.4, 139.7),
+    (C2000, "NAPPE_PWM", "J5", 279.4, 215.9),
+    (C2000, "NAPPE_GPIO", "J6", 375.92, 63.5),
+    (C2000, "ALIM_5V", "J7", 375.92, 139.7),
+    (C2000, "ALIM_5V", "J8", 375.92, 177.8),
+    (ESP32, "ESP32_C6_DEVKITC_1_J1", "J9", 468.63, 63.5),
+    (ESP32, "ESP32_C6_DEVKITC_1_J3", "J10", 468.63, 139.7),
 ]
 
 # Contour : le shield porte les deux devkits cote a cote plus quatre embases
@@ -72,13 +87,13 @@ def sym_blocks(path):
     return out
 
 
-def qualified(block, name):
+def qualified(block, nick, name):
     return block.replace(
-        '(symbol "%s"' % name, '(symbol "%s:%s"' % (LIB_NICK, name), 1
+        '(symbol "%s"' % name, '(symbol "%s:%s"' % (nick, name), 1
     )
 
 
-def conn_instance(name, ref, x, y, sch_uuid, pins):
+def conn_instance(nick, name, ref, x, y, sch_uuid, pins):
     pin_uuids = "\n".join(
         '\t\t(pin "%s" (uuid "%s"))' % (n, pg.uid()) for n, _, _, _, _ in pins
     )
@@ -99,7 +114,7 @@ def conn_instance(name, ref, x, y, sch_uuid, pins):
         '\t\t)\n'
         '\t)'
         % (
-            LIB_NICK, name, x, y, pg.uid(), ref, x - 22.86, y - 45.72,
+            nick, name, x, y, pg.uid(), ref, x - 22.86, y - 45.72,
             name, x - 22.86, y + 45.72, pin_uuids, PROJECT, sch_uuid, ref,
         )
     )
@@ -107,15 +122,18 @@ def conn_instance(name, ref, x, y, sch_uuid, pins):
 
 def gen_sch():
     sch_uuid = pg.uid()
-    blocks = sym_blocks(CONN_LIB)
+    blocks = {nick: sym_blocks(path) for nick, path in LIBS.items()}
 
+    # Un seul exemplaire de chaque symbole dans lib_symbols, meme si le
+    # symbole est pose plusieurs fois — ALIM_5V l'est deux fois.
     used = []
-    for name, _ref, _x, _y in [(p[0], p[1], p[2], p[3]) for p in PLACEMENT]:
-        if name not in used:
-            used.append(name)
+    for nick, name, _ref, _x, _y in PLACEMENT:
+        if (nick, name) not in used:
+            used.append((nick, name))
 
     lib = "\n".join(
-        pg.indent(qualified(blocks[n], n), 2) for n in used
+        pg.indent(qualified(blocks[nick][name], nick, name), 2)
+        for nick, name in used
     )
     lib += "\n" + "\n".join(
         pg.indent(pg.extract_from(pg.POWER_LIB, n), 2)
@@ -124,9 +142,9 @@ def gen_sch():
 
     body, n_pwr = [], 0
     flagged = set()
-    for name, ref, x, y in PLACEMENT:
-        pins = pg.parse_pins(blocks[name])
-        body.append(conn_instance(name, ref, x, y, sch_uuid, pins))
+    for nick, name, ref, x, y in PLACEMENT:
+        pins = pg.parse_pins(blocks[nick][name])
+        body.append(conn_instance(nick, name, ref, x, y, sch_uuid, pins))
         items, count = wire_power(pins, x, y, sch_uuid, n_pwr, flagged)
         body.extend(items)
         n_pwr += count
@@ -138,8 +156,8 @@ def gen_sch():
 \t(uuid "%s")
 \t(paper "%s")
 \t(title_block
-\t\t(title "Shield d'isolation C2000 — connecteurs devkit et nappes")
-\t\t(comment 1 "Genere depuis lib/ — brochage du 2026-08-30")
+\t\t(title "Shield d'isolation C2000 — devkits, nappes et ESP32-C6")
+\t\t(comment 1 "Genere depuis lib/ — connecteur devkit 2 x 28")
 \t\t(comment 2 "Signaux non cables : routage a faire a la main")
 \t)
 \t(lib_symbols
@@ -229,24 +247,28 @@ def main():
         json.dumps(gen_pro(args.name), indent=2), encoding="utf-8"
     )
 
+    # La table est partagee avec les autres projets du depot : on ajoute les
+    # entrees manquantes, on ne reecrit jamais le fichier entier.
     table = out / "sym-lib-table"
-    entry = (
-        '  (lib (name "%s")(type "KiCad")(uri "${KIPRJMOD}/%s")(options "")'
-        '(descr "Connecteurs devkit, nappes, JTAG, alimentation"))\n' % (LIB_NICK, CONN_LIB.as_posix())
+    text = (
+        table.read_text(encoding="utf-8")
+        if table.exists()
+        else "(sym_lib_table\n  (version 7)\n)\n"
     )
-    if table.exists():
-        text = table.read_text(encoding="utf-8")
-        if LIB_NICK not in text:
-            table.write_text(
-                text.rstrip().rstrip(")").rstrip() + "\n" + entry + ")\n",
-                encoding="utf-8",
-            )
-    else:
-        table.write_text("(sym_lib_table\n  (version 7)\n" + entry + ")\n", encoding="utf-8")
+    added = []
+    for nick, path in LIBS.items():
+        if '(name "%s")' % nick in text:
+            continue
+        text = text.rstrip().rstrip(")").rstrip() + "\n" + (
+            '  (lib (name "%s")(type "KiCad")(uri "${KIPRJMOD}/%s")(options "")'
+            '(descr "Connecteurs du shield"))\n' % (nick, path.as_posix())
+        ) + ")\n"
+        added.append(nick)
+    table.write_text(text, encoding="utf-8")
 
     for p in paths.values():
         print("Ecrit : %s" % p)
-    print("Librairie %s -> %s" % (LIB_NICK, CONN_LIB))
+    print("sym-lib-table : %s" % (", ".join(added) if added else "deja a jour"))
 
 
 if __name__ == "__main__":

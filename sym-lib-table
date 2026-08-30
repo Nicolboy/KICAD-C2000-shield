@@ -3,4 +3,5 @@
   (lib (name "shield")(type "KiCad")(uri "${KIPRJMOD}/build/CONN_C2000_2x24.kicad_sym")(options "")(descr "Connecteur genere depuis connecteur-2x24.md"))
   (lib (name "C2000_MCU")(type "KiCad")(uri "${KIPRJMOD}/lib/C2000_MCU.kicad_sym")(options "")(descr "TMS320F280037CSPM et TMS320F28P551SG5PM"))
   (lib (name "C2000_Devkit_Connectors")(type "KiCad")(uri "${KIPRJMOD}/lib/C2000_Devkit_Connectors.kicad_sym")(options "")(descr "Connecteurs devkit, nappes, JTAG, alimentation"))
+  (lib (name "ESP32_C6_Devkit")(type "KiCad")(uri "${KIPRJMOD}/lib/ESP32_C6_Devkit.kicad_sym")(options "")(descr "Connecteurs du shield"))
 )

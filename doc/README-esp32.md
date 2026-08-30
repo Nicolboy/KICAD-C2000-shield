@@ -8,7 +8,7 @@ broche vérifiées.
 | Fichier | Symboles |
 |---|---|
 | `C2000_MCU.kicad_sym` | `TMS320F280037CSPM`, `TMS320F28P551SG5PM` |
-| `C2000_Devkit_Connectors.kicad_sym` | `DEVKIT_C2000_ROW_A` (1×28), `DEVKIT_C2000_ROW_B` (1×28), `NAPPE_ADC1`, `NAPPE_ADC2`, `NAPPE_PWM`, `NAPPE_GPIO`, `ALIM_5V` |
+| `C2000_Devkit_Connectors.kicad_sym` | `DEVKIT_C2000_ROW_A`, `DEVKIT_C2000_ROW_B`, `NAPPE_ADC1`, `NAPPE_ADC2`, `NAPPE_PWM`, `NAPPE_GPIO`, `ALIM_5V` |
 | `brochage_connecteur_devkit.csv` | correspondance position ↔ broche MCU ↔ fonction ↔ mux |
 
 ## Installation
@@ -66,20 +66,6 @@ avant la séparation des deux branches d'alimentation du shield.
   bibliothèques standard KiCad.
 
 ---
-
-## Connecteur devkit : 2 × 28
-
-Les deux rangées font 28 positions, même référence de support, longueur de carte
-71 mm. La rangée A porte 18 signaux et 10 masses, la rangée B 24 signaux et
-4 masses.
-
-Retirés par rapport à la version 24/32 : `CMP_OUT2`, `CLB_OUT2`, `GPIO_2` et
-`GPIO_3`. Les broches MCU correspondantes — 62, 54, 53 et 55 — deviennent les
-pastilles de test `TP_PIN62`, `TP_PIN54`, `TP_PIN53` et `TP_PIN55`.
-
-**Les deux rangées étant identiques, prévoir une clé mécanique** : position
-obturée aux extrémités ou ergot sur le support. L'asymétrie 24/32 assurait le
-détrompage toute seule, ce n'est plus le cas.
 
 ## Schémas générés
 
@@ -158,27 +144,12 @@ l'embase 5V — sont **mutuellement exclusives**. Le shield alimentant par J1-14
 il faut soit un cavalier, soit une Schottky en série, pour qu'un branchement USB
 pendant la mise au point ne crée pas de conflit.
 
-### Montage sur le shield
+### Interface hôte
 
-Deux supports femelles **1 × 16** au pas 2,54 mm, aux cotes de J1 et J3. Le
-devkit s'enfiche directement, sans carte intermédiaire.
+`INTERFACE_HOTE_ESP`, embase 1 × 14 sur le shield : +5V, masses intercalées,
+UART vers le C2000, BOOT_SEL, nRESET, et les cinq lignes de l'OLED.
 
-Trois contraintes d'implantation :
-
-- **Dégagement d'antenne.** L'antenne PCB est à l'extrémité du module
-  ESP32-C6-WROOM-1. Elle doit déborder du bord du shield, sans cuivre ni plan de
-  masse dessous, sur toute la zone. C'est la contrainte la plus facile à oublier
-  et la plus coûteuse à corriger après routage.
-- **Écartement des rangées** à relever dans
-  `esp32-c6-devkitc-1-dimensions_v1.2.dxf`, importable dans KiCad. Ne pas
-  supposer 22,86 mm sans vérification.
-- **Éloignement de la zone analogique.** Le module et l'OLED sont les deux
-  sources de bruit du shield. Les placer du côté opposé au conditionnement, sur
-  la branche d'alimentation qui leur est réservée.
-
-Les broches non utilisées de J1 et J3 méritent des pastilles de test plutôt que
-d'être laissées en l'air : GPIO0, GPIO1, GPIO21, GPIO22 et GPIO23 sont les
-réserves franches.
-
-**Conséquence assumée** : changer de module ESP32 plus tard demandera de
-reprendre le shield. C'est le choix retenu, en échange d'une carte de moins.
+Elle est **indépendante du module ESP32 retenu**. Une petite carte d'adaptation
+fait la correspondance vers J1 et J3 du C6-DevKitC-1. Changer d'ESP32 plus tard
+ne demande que de refaire cet adaptateur, pas le shield — même raisonnement que
+la carte de conditionnement côté C2000.
