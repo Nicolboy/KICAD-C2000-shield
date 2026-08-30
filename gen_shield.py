@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Genere le projet KiCad du shield depuis les symboles de lib/.
 
-Source : doc/20260830-brochage.md (rangee A de 24, rangee B de 32,
+Source : doc/brochage-devkit.md (rangee A de 24, rangee B de 32,
 quatre nappes 2 x 8, alimentation sur connecteur separe) et les deux
 librairie lib/C2000_Devkit_Connectors.kicad_sym.
 
@@ -9,20 +9,15 @@ Le schema pose les connecteurs et cable les deux nets d'alimentation. Le
 routage des signaux n'est pas fait ici : il demande des choix de conception
 qui n'appartiennent pas a un generateur.
 
-    python shield_gen.py [-o .] [--name shield] [--force]
+    python gen_shield.py [-o .] [--name shield] [--force]
 """
 
 import argparse
-import importlib.util
 import json
 import re
 from pathlib import Path
 
-_spec = importlib.util.spec_from_file_location(
-    "projet_gen", Path(__file__).with_name("projet_gen.py")
-)
-pg = importlib.util.module_from_spec(_spec)
-_spec.loader.exec_module(pg)
+import kicad_gen as pg
 
 IMPORTS = Path("imports")
 LIBDIR = Path("lib")
@@ -31,6 +26,9 @@ LIB_NICK = "C2000_Devkit_Connectors"
 
 # Carte A3 : sept connecteurs dont un 1 x 32 ne tiennent pas au propre sur A4.
 PAPER = "A3"
+
+# Nom du projet, repris dans les instances de chaque symbole.
+PROJECT = "shield"
 
 # (symbole, reference, x, y) — multiples de 1,27 mm, sinon les extremites de
 # fil tombent hors grille et l'ERC leve endpoint_off_grid sur chacune.
@@ -95,14 +93,14 @@ def conn_instance(name, ref, x, y, sch_uuid, pins):
         '\t\t(property "Value" "%s" (at %.2f %.2f 0) (effects (font (size 1.27 1.27)) (justify left)))\n'
         '%s\n'
         '\t\t(instances\n'
-        '\t\t\t(project "shield"\n'
+        '\t\t\t(project "%s"\n'
         '\t\t\t\t(path "/%s" (reference "%s") (unit 1))\n'
         '\t\t\t)\n'
         '\t\t)\n'
         '\t)'
         % (
             LIB_NICK, name, x, y, pg.uid(), ref, x - 22.86, y - 45.72,
-            name, x - 22.86, y + 45.72, pin_uuids, sch_uuid, ref,
+            name, x - 22.86, y + 45.72, pin_uuids, PROJECT, sch_uuid, ref,
         )
     )
 
@@ -135,7 +133,7 @@ def gen_sch():
 
     return """(kicad_sch
 \t(version 20241209)
-\t(generator "shield_gen")
+\t(generator "gen_shield")
 \t(generator_version "1.0")
 \t(uuid "%s")
 \t(paper "%s")
@@ -182,7 +180,7 @@ def wire_power(pins, at_x, at_y, sch_uuid, n0, flagged):
             )
             items.append(
                 pg.pwr_symbol(
-                    "PWR_FLAG", "#FLG%02d" % (n0 + n), xm, y0, 0, sch_uuid,
+                    "PWR_FLAG", "#FLG%02d" % (n0 + n), xm, y0, 0, sch_uuid, PROJECT,
                     show_value=False,
                 )
             )
@@ -191,14 +189,15 @@ def wire_power(pins, at_x, at_y, sch_uuid, n0, flagged):
         items.append(
             pg.pwr_symbol(
                 name, "#PWR%03d" % (n0 + n), x1, y0,
-                270 if direction < 0 else 90, sch_uuid, direction=direction,
+                270 if direction < 0 else 90, sch_uuid, PROJECT,
+                direction=direction,
             )
         )
     return items, n
 
 
 def gen_pro(name):
-    pro = pg.gen_pro()
+    pro = pg.gen_pro(name)
     pro["meta"]["filename"] = name + ".kicad_pro"
     return pro
 

@@ -9,20 +9,15 @@ Le champ (project "...") des instances est reecrit au nom reel du projet :
 les deux schemas fournis portent tous les deux "devkit_c2000", alors qu'ils
 donnent deux projets distincts.
 
-    python devkit_gen.py [--force]
+    python gen_devkit.py [--force]
 """
 
 import argparse
-import importlib.util
 import json
 import re
 from pathlib import Path
 
-_spec = importlib.util.spec_from_file_location(
-    "projet_gen", Path(__file__).with_name("projet_gen.py")
-)
-pg = importlib.util.module_from_spec(_spec)
-_spec.loader.exec_module(pg)
+import kicad_gen as pg
 
 IMPORTS = Path("imports")
 LIBDIR = Path("lib")
@@ -34,8 +29,8 @@ LIBS = {
 }
 
 PROJECTS = [
-    ("devkit_c2000_A_F280037", IMPORTS / "devkit_c2000_A_F280037.kicad_sch"),
-    ("devkit_c2000_B_F28P551", IMPORTS / "devkit_c2000_B_F28P551.kicad_sch"),
+    ("devkit_A_F280037", IMPORTS / "devkit_c2000_A_F280037.kicad_sch"),
+    ("devkit_B_F28P551", IMPORTS / "devkit_c2000_B_F28P551.kicad_sch"),
 ]
 
 # Contour provisoire : la rangee B fait 32 positions au pas 2,54, soit plus de
@@ -94,7 +89,7 @@ def main():
             (out / (name + ".kicad_pcb")).write_text(
                 pg.gen_pcb(), encoding="utf-8"
             )
-            pro = pg.gen_pro()
+            pro = pg.gen_pro(name)
             pro["meta"]["filename"] = name + ".kicad_pro"
             (out / (name + ".kicad_pro")).write_text(
                 json.dumps(pro, indent=2), encoding="utf-8"

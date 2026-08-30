@@ -26,19 +26,32 @@ cle github: ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIE4f3+cYDYeS9AhdrAqW053Hjwf6gioS
 
 ## Ce qui fait autorité
 
-`connecteur-2x24.md` **est** la source de vérité du brochage. Tout le reste en
+`doc/brochage-2x24.md` **est** la source de vérité du brochage. Tout le reste en
 découle par génération.
 
 - Ne jamais éditer `build/*.kicad_sym` à la main. Modifier le `.md`, relancer
-  `python3 connecteur_gen.py connecteur-2x24.md -o build/`.
+  `python gen_symbole_2x24.py doc/brochage-2x24.md -o build/`.
 - Si le symbole et le `.md` divergent, le `.md` a raison.
+
+## Organisation du dépôt
+
+Un préfixe par groupe, le rôle dans le nom.
+
+| Groupe | Fichiers |
+|---|---|
+| Brique commune | `kicad_gen.py` — primitives s-expression, gabarits `.kicad_pcb` / `.kicad_pro`. Ne génère rien seul. |
+| Générateurs | `gen_symbole_2x24.py`, `gen_shield_2x24.py`, `gen_shield.py`, `gen_devkit.py` |
+| Projets KiCad | `shield.*` (courant), `shield_2x24.*` (brochage antérieur), `devkit_A_F280037.*`, `devkit_B_F28P551.*` |
+| Librairies | `lib/` versionné, `build/` généré |
+| Documents | `doc/` — brochages, spécification, README des librairies |
+| Boîte de réception | `imports/` — **ignoré par git**, rien ne doit en dépendre à l'ouverture |
 
 ## Vérification avant tout commit
 
 ```
-python3 connecteur_gen.py connecteur-2x24.md --check   # doit sortir en 0
-kicad-cli sch erc --exit-code-violations projet.kicad_sch
-kicad-cli pcb drc --exit-code-violations projet.kicad_pcb
+python gen_symbole_2x24.py doc/brochage-2x24.md --check   # doit sortir en 0
+kicad-cli sch erc --exit-code-violations <projet>.kicad_sch
+kicad-cli pcb drc --exit-code-violations <projet>.kicad_pcb
 ```
 
 ## Décisions de conception à ne pas défaire
