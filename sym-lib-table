@@ -2,4 +2,6 @@
   (version 7)
   (lib (name "shield")(type "KiCad")(uri "${KIPRJMOD}/build/CONN_C2000_2x24.kicad_sym")(options "")(descr "Connecteur genere"))
   (lib (name "c2000")(type "KiCad")(uri "${KIPRJMOD}/imports/C2000_Devkit_Connectors.kicad_sym")(options "")(descr "Connecteurs devkit C2000 — imports/"))
+  (lib (name "C2000_MCU")(type "KiCad")(uri "${KIPRJMOD}/imports/C2000_MCU2.kicad_sym")(options "")(descr "Devkit C2000 — imports/"))
+  (lib (name "C2000_Devkit_Connectors")(type "KiCad")(uri "${KIPRJMOD}/imports/C2000_Devkit_Connectors2.kicad_sym")(options "")(descr "Devkit C2000 — imports/"))
 )
