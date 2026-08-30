@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""Genere le projet KiCad du shield depuis les symboles de imports/.
+"""Genere le projet KiCad du shield depuis les symboles de lib/.
 
-Source : imports/20260830-brochage.md (rangee A de 24, rangee B de 32,
+Source : doc/20260830-brochage.md (rangee A de 24, rangee B de 32,
 quatre nappes 2 x 8, alimentation sur connecteur separe) et les deux
-librairies de imports/.
+librairie lib/C2000_Devkit_Connectors.kicad_sym.
 
 Le schema pose les connecteurs et cable les deux nets d'alimentation. Le
 routage des signaux n'est pas fait ici : il demande des choix de conception
@@ -25,8 +25,9 @@ pg = importlib.util.module_from_spec(_spec)
 _spec.loader.exec_module(pg)
 
 IMPORTS = Path("imports")
-CONN_LIB = IMPORTS / "C2000_Devkit_Connectors.kicad_sym"
-LIB_NICK = "c2000"
+LIBDIR = Path("lib")
+CONN_LIB = LIBDIR / "C2000_Devkit_Connectors.kicad_sym"
+LIB_NICK = "C2000_Devkit_Connectors"
 
 # Carte A3 : sept connecteurs dont un 1 x 32 ne tiennent pas au propre sur A4.
 PAPER = "A3"
@@ -140,7 +141,7 @@ def gen_sch():
 \t(paper "%s")
 \t(title_block
 \t\t(title "Shield d'isolation C2000 — connecteurs devkit et nappes")
-\t\t(comment 1 "Genere depuis imports/ — brochage du 2026-08-30")
+\t\t(comment 1 "Genere depuis lib/ — brochage du 2026-08-30")
 \t\t(comment 2 "Signaux non cables : routage a faire a la main")
 \t)
 \t(lib_symbols
@@ -232,7 +233,7 @@ def main():
     table = out / "sym-lib-table"
     entry = (
         '  (lib (name "%s")(type "KiCad")(uri "${KIPRJMOD}/%s")(options "")'
-        '(descr "Connecteurs devkit C2000 — imports/"))\n' % (LIB_NICK, CONN_LIB.as_posix())
+        '(descr "Connecteurs devkit, nappes, JTAG, alimentation"))\n' % (LIB_NICK, CONN_LIB.as_posix())
     )
     if table.exists():
         text = table.read_text(encoding="utf-8")

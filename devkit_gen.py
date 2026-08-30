@@ -25,11 +25,12 @@ pg = importlib.util.module_from_spec(_spec)
 _spec.loader.exec_module(pg)
 
 IMPORTS = Path("imports")
+LIBDIR = Path("lib")
 
 # Les schemas fournis referencent ces deux nicknames de librairie.
 LIBS = {
-    "C2000_MCU": IMPORTS / "C2000_MCU2.kicad_sym",
-    "C2000_Devkit_Connectors": IMPORTS / "C2000_Devkit_Connectors2.kicad_sym",
+    "C2000_MCU": LIBDIR / "C2000_MCU.kicad_sym",
+    "C2000_Devkit_Connectors": LIBDIR / "C2000_Devkit_Connectors.kicad_sym",
 }
 
 PROJECTS = [
@@ -61,7 +62,7 @@ def update_lib_table(out):
             continue
         text = text.rstrip().rstrip(")").rstrip() + "\n" + (
             '  (lib (name "%s")(type "KiCad")(uri "${KIPRJMOD}/%s")(options "")'
-            '(descr "Devkit C2000 — imports/"))\n' % (nick, path.as_posix())
+            '(descr "Devkit C2000"))\n' % (nick, path.as_posix())
         ) + ")\n"
         added.append(nick)
     table.write_text(text, encoding="utf-8")
