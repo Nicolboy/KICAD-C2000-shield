@@ -68,8 +68,12 @@ POWER_LIB = Path(
     r"C:\Program Files\KiCad\10.0\share\kicad\symbols\power.kicad_sym"
 )
 
+# Les coordonnees peuvent etre en notation scientifique (3.55271e-15 pour un
+# zero calcule) : sans l'exposant, le pin concerne passe inapercu.
+NUM = r'-?[\d.]+(?:[eE][-+]?\d+)?'
+
 PIN_RE = re.compile(
-    r'\(pin\s+\S+\s+\S+\s+\(at\s+(-?[\d.]+)\s+(-?[\d.]+)\s+(\d+)\)'
+    r'\(pin\s+\S+\s+\S+\s+\(at\s+(' + NUM + r')\s+(' + NUM + r')\s+(\d+)\)'
     r'.*?\(name\s+"([^"]+)"'
     r'.*?\(number\s+"([^"]+)"',
     re.S,
@@ -84,7 +88,9 @@ def parse_pins(block):
     out = []
     for m in PIN_RE.finditer(block):
         x, y, ang, name, num = m.groups()
-        out.append((num, name, float(x), float(y), int(ang)))
+        # round() ecrase les zeros calcules ; sans ca l'extremite du fil
+        # tombe hors grille.
+        out.append((num, name, round(float(x), 3), round(float(y), 3), int(ang)))
     return out
 
 
