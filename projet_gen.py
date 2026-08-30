@@ -411,12 +411,24 @@ def main():
     pro_path.write_text(json.dumps(gen_pro(), indent=2), encoding="utf-8")
 
     lib_dir = Path(args.sym).parent.as_posix()
-    (out / "sym-lib-table").write_text(
-        '(sym_lib_table\n  (version 7)\n'
-        '  (lib (name "%s")(type "KiCad")(uri "${KIPRJMOD}/%s")(options "")(descr "Connecteur genere"))\n)\n'
-        % (LIB_NICK, Path(args.sym).as_posix()),
-        encoding="utf-8",
+    # La table est partagee avec les autres projets du depot : on ajoute son
+    # entree si elle manque, on ne reecrit jamais le fichier entier.
+    table = out / "sym-lib-table"
+    entry = (
+        '  (lib (name "%s")(type "KiCad")(uri "${KIPRJMOD}/%s")(options "")'
+        '(descr "Connecteur genere"))\n' % (LIB_NICK, Path(args.sym).as_posix())
     )
+    if table.exists():
+        text = table.read_text(encoding="utf-8")
+        if '(name "%s")' % LIB_NICK not in text:
+            table.write_text(
+                text.rstrip().rstrip(")").rstrip() + "\n" + entry + ")\n",
+                encoding="utf-8",
+            )
+    else:
+        table.write_text(
+            "(sym_lib_table\n  (version 7)\n" + entry + ")\n", encoding="utf-8"
+        )
 
     print("Ecrit : %s" % sch_path)
     print("Ecrit : %s" % pcb_path)
