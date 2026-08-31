@@ -1,10 +1,32 @@
+# Environnement et cache
 .venv/
 __pycache__/
-*.kicad_prl
-*-backups/
-fp-info-cache
-.history/
-*-erc.rpt
-*-drc.rpt
+
+# Boîte de réception : rien de versionné ne doit en dépendre
 imports/
 *.dxf
+
+# KiCad — état local, sauvegardes, verrous
+*.kicad_prl
+*-backups/
+*.kicad_sch-bak
+*.kicad_pcb-bak
+*.sch-bak
+*.pcb-bak
+fp-info-cache
+.#*
+.history/
+
+# Rapports de vérification, régénérés à chaque passage
+*-erc.rpt
+*-drc.rpt
+
+# Sorties de fabrication
+/plt/
+/gerber/
+/fab/
+
+# Système
+.DS_Store
+Thumbs.db
+*~
