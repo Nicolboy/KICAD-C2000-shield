@@ -50,6 +50,12 @@ BOARD_W = 90.0
 BOARD_H = 45.0
 
 
+# Position de l'instance du MCU sur la feuille. Les fichiers fournis la
+# posent en (127, 100) : 100 n'est pas un multiple de 1,27 mm, donc les 64
+# broches tombent hors grille et l'ERC leve endpoint_off_grid. 101,6 = 80 pas.
+MCU_AT = (127.0, 101.6)
+GRID = 1.27
+
 # Orientation de l'etiquette globale selon l'angle du pin qu'elle touche.
 # Le texte s'eloigne toujours du corps du symbole.
 LABEL_DIR = {0: (180, "right"), 180: (0, "left"),
@@ -102,18 +108,38 @@ def square_mcu(text):
     if not inst:
         raise SystemExit("instance du MCU introuvable")
     ux, uy = float(inst.group(1)), float(inst.group(2))
+    vx, vy = MCU_AT
+    for v in (vx, vy):
+        if round(v / GRID, 6) != round(round(v / GRID), 6):
+            raise SystemExit("MCU_AT %s n'est pas sur la grille de %s mm"
+                             % (MCU_AT, GRID))
 
     old_pins = {n: (x, y, a) for n, _nm, x, y, a in pg.parse_pins(old_block)}
     new_pins = {n: (x, y, a) for n, _nm, x, y, a in pg.parse_pins(squares[mcu])}
     if set(old_pins) != set(new_pins):
         raise SystemExit("les deux symboles n'ont pas les memes broches")
 
+    # Les etiquettes suivent la broche : ancienne position absolue (autour de
+    # l'ancienne origine) vers la nouvelle (autour de MCU_AT).
     move = {}
     for num, (ox, oy, _oa) in old_pins.items():
         nx, ny, na = new_pins[num]
         move[(round(ux + ox, 2), round(uy - oy, 2))] = (
-            round(ux + nx, 2), round(uy - ny, 2), na
+            round(vx + nx, 2), round(vy - ny, 2), na
         )
+
+    # L'instance elle-meme, et ses champs texte, se decalent d'autant.
+    dx, dy = vx - ux, vy - uy
+    inst_block = sexp_block(text, inst.start())
+    moved_inst = re.sub(
+        r'\(at ([\d.-]+) ([\d.-]+) (\d+)\)',
+        lambda m: '(at %s %s %s)' % (
+            _fmt(float(m.group(1)) + dx), _fmt(float(m.group(2)) + dy),
+            m.group(3),
+        ),
+        inst_block,
+    )
+    text = text.replace(inst_block, moved_inst)
 
     moved = [0]
 
