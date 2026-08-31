@@ -5,13 +5,17 @@ Les schemas viennent tout faits de imports/ : ce script ne les fabrique pas,
 il les installe a la racine du depot (imports/ est ignore par git) et leur
 ajoute le .kicad_pro et le .kicad_pcb qui manquent pour former un projet.
 
-Deux retouches sont appliquees a chaque schema installe :
+Trois retouches sont appliquees a chaque schema installe :
 
-1. le champ (project "...") est reecrit au nom reel du projet —
-   les deux fichiers portent "devkit_c2000" alors qu ils
-   donnent deux projets distincts ;
-2. le symbole MCU est remplace par sa version carree (gen_symbole_mcu.py) et
-   les 64 etiquettes globales sont deplacees sur les nouvelles broches.
+1. le champ (project "...") est reecrit au nom reel du projet — les deux
+   fichiers portent "devkit_c2000" alors qu ils donnent deux projets
+   distincts ;
+2. le symbole MCU est remplace par sa version carree (gen_symbole_mcu.py) ;
+3. les quatre symboles sont recales sur la grille de 1,27 mm, faute de quoi
+   leurs broches sont hors grille et l'ERC leve endpoint_off_grid.
+
+Les etiquettes globales suivent dans les deux derniers cas : c'est elles qui
+portent toute la connectivite.
 
     python gen_devkit.py [--force]
 """
@@ -80,13 +84,20 @@ def sexp_block(text, start):
     raise ValueError("bloc non termine")
 
 
-def square_mcu(text):
-    """Remplace le symbole MCU par sa version carree et suit les etiquettes.
+def snap(v):
+    """Ramene une coordonnee sur la grille de connexion."""
+    return round(round(v / GRID) * GRID, 2)
+
+
+def retouche(text):
+    """Symbole MCU en carre, et toutes les instances recalees sur la grille.
 
     La connectivite de ces schemas passe par des etiquettes globales posees
-    exactement sur le point de connexion de chaque broche. Changer la
-    geometrie du symbole sans deplacer les etiquettes les detacherait toutes
-    en silence : l'ERC ne dirait rien, et le netlist serait vide.
+    exactement sur le point de connexion de chaque broche, sans un seul fil.
+    Deplacer un symbole sans deplacer ses etiquettes les detacherait toutes
+    en silence : l'ERC ne dirait rien de plus, et la netlist serait vide.
+    Les deux operations partagent donc le meme mecanisme — pour chaque
+    broche, ou elle etait, ou elle va — et les etiquettes suivent.
     """
     lib_text = MCU_LIB.read_text(encoding="utf-8")
     squares = {
@@ -98,48 +109,68 @@ def square_mcu(text):
     if not m:
         raise SystemExit("symbole MCU introuvable dans le schema")
     mcu = m.group(1)
-    old_block = sexp_block(text, m.start())
+    mcu_lib_id = "%s:%s" % (MCU_NICK, mcu)
+    old_mcu_block = sexp_block(text, m.start())
 
-    # Position de l'instance, pour passer des coordonnees symbole a la feuille.
-    inst = re.search(
-        r'\(symbol \(lib_id "%s:%s"\) \(at ([\d.-]+) ([\d.-]+) \d+\)'
-        % (MCU_NICK, mcu), text
-    )
-    if not inst:
-        raise SystemExit("instance du MCU introuvable")
-    ux, uy = float(inst.group(1)), float(inst.group(2))
-    vx, vy = MCU_AT
-    for v in (vx, vy):
-        if round(v / GRID, 6) != round(round(v / GRID), 6):
-            raise SystemExit("MCU_AT %s n'est pas sur la grille de %s mm"
-                             % (MCU_AT, GRID))
+    for v in MCU_AT:
+        if snap(v) != round(v, 2):
+            raise SystemExit(
+                "MCU_AT %s n'est pas sur la grille de %s mm" % (MCU_AT, GRID)
+            )
 
-    old_pins = {n: (x, y, a) for n, _nm, x, y, a in pg.parse_pins(old_block)}
-    new_pins = {n: (x, y, a) for n, _nm, x, y, a in pg.parse_pins(squares[mcu])}
-    if set(old_pins) != set(new_pins):
-        raise SystemExit("les deux symboles n'ont pas les memes broches")
+    # Geometrie de chaque symbole : celle du schema, sauf pour le MCU dont on
+    # veut la version carree.
+    # Les definitions ne sont pas toujours en debut de ligne : les fichiers
+    # fournis collent la parenthese fermante de la precedente devant. Seules
+    # les definitions de premier niveau portent un nom "librairie:symbole",
+    # les sous-symboles d'unite n'ont pas de deux-points.
+    lib_pins = {}
+    for lm in re.finditer(r'\(symbol "([^":]+:[^"]+)"', text):
+        name = lm.group(1)
+        block = squares[mcu] if name == mcu_lib_id else sexp_block(text, lm.start())
+        lib_pins[name] = {
+            n: (x, y, a) for n, _nm, x, y, a in pg.parse_pins(block)
+        }
+    old_mcu_pins = {
+        n: (x, y, a) for n, _nm, x, y, a in pg.parse_pins(old_mcu_block)
+    }
 
-    # Les etiquettes suivent la broche : ancienne position absolue (autour de
-    # l'ancienne origine) vers la nouvelle (autour de MCU_AT).
-    move = {}
-    for num, (ox, oy, _oa) in old_pins.items():
-        nx, ny, na = new_pins[num]
-        move[(round(ux + ox, 2), round(uy - oy, 2))] = (
-            round(vx + nx, 2), round(vy - ny, 2), na
+    move, shifted = {}, []
+    for im in re.finditer(
+        r'\(symbol \(lib_id "([^"]+)"\) \(at ([\d.-]+) ([\d.-]+) (\d+)\)', text
+    ):
+        lib_id = im.group(1)
+        if lib_id not in lib_pins:
+            continue
+        ux, uy = float(im.group(2)), float(im.group(3))
+        vx, vy = MCU_AT if lib_id == mcu_lib_id else (snap(ux), snap(uy))
+        # Les etiquettes sont posees sur la geometrie actuelle ; pour le MCU
+        # c'est celle d'avant le passage en carre.
+        source = old_mcu_pins if lib_id == mcu_lib_id else lib_pins[lib_id]
+        for num, (ox, oy, _oa) in source.items():
+            nx, ny, na = lib_pins[lib_id][num]
+            move[(round(ux + ox, 2), round(uy - oy, 2))] = (
+                round(vx + nx, 2), round(vy - ny, 2), na
+            )
+        if (vx, vy) != (ux, uy):
+            shifted.append((im.start(), vx - ux, vy - uy))
+
+    # De la fin vers le debut : deplacer un bloc change les offsets suivants.
+    for start, dx, dy in reversed(shifted):
+        block = sexp_block(text, start)
+        text = text.replace(
+            block,
+            re.sub(
+                r'\(at ([\d.-]+) ([\d.-]+) (\d+)\)',
+                lambda m: '(at %s %s %s)' % (
+                    _fmt(float(m.group(1)) + dx),
+                    _fmt(float(m.group(2)) + dy),
+                    m.group(3),
+                ),
+                block,
+            ),
+            1,
         )
-
-    # L'instance elle-meme, et ses champs texte, se decalent d'autant.
-    dx, dy = vx - ux, vy - uy
-    inst_block = sexp_block(text, inst.start())
-    moved_inst = re.sub(
-        r'\(at ([\d.-]+) ([\d.-]+) (\d+)\)',
-        lambda m: '(at %s %s %s)' % (
-            _fmt(float(m.group(1)) + dx), _fmt(float(m.group(2)) + dy),
-            m.group(3),
-        ),
-        inst_block,
-    )
-    text = text.replace(inst_block, moved_inst)
 
     moved = [0]
 
@@ -157,17 +188,21 @@ def square_mcu(text):
                m.group(6), m.group(7), just)
         )
 
+    total = len(LABEL_RE.findall(text))
     text = LABEL_RE.sub(relabel, text)
-    if moved[0] != len(move):
+    if moved[0] != total:
         raise SystemExit(
-            "%d etiquettes deplacees sur %d broches — le schema serait casse"
-            % (moved[0], len(move))
+            "%d etiquettes sur %d retrouvent une broche — le schema serait"
+            " casse" % (moved[0], total)
         )
+
     text = text.replace(
-        old_block, squares[mcu].replace('(symbol "%s"' % mcu,
-                                        '(symbol "%s:%s"' % (MCU_NICK, mcu), 1)
+        old_mcu_block,
+        squares[mcu].replace(
+            '(symbol "%s"' % mcu, '(symbol "%s"' % mcu_lib_id, 1
+        ),
     )
-    return text, mcu, len(move), moved[0]
+    return text, mcu, moved[0], len(shifted)
 
 
 def _fmt(v):
@@ -177,9 +212,9 @@ def _fmt(v):
 def install_sch(name, src):
     text = src.read_text(encoding="utf-8")
     text = re.sub(r'\(project "[^"]*"', '(project "%s"' % name, text)
-    text, mcu, npins, nlab = square_mcu(text)
-    print("  %s : symbole carre, %d broches, %d etiquettes suivies"
-          % (mcu, npins, nlab))
+    text, mcu, nlab, nmoved = retouche(text)
+    print("  %s carre, %d etiquettes suivies, %d symboles recales"
+          % (mcu, nlab, nmoved))
     return text
 
 
