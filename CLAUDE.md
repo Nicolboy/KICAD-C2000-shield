@@ -40,7 +40,7 @@ Un préfixe par groupe, le rôle dans le nom.
 | Groupe | Fichiers |
 |---|---|
 | Brique commune | `kicad_gen.py` — primitives s-expression, gabarits `.kicad_pcb` / `.kicad_pro`. Ne génère rien seul. |
-| Générateurs | `gen_symbole_2x24.py`, `gen_shield_2x24.py`, `gen_shield.py`, `gen_devkit.py` |
+| Générateurs | `gen_symbole_2x24.py`, `gen_symbole_mcu.py`, `gen_shield_2x24.py`, `gen_shield.py`, `gen_devkit.py` |
 | Projets KiCad | `shield.*` (courant), `shield_2x24.*` (brochage antérieur), `devkit_A_F280037.*`, `devkit_B_F28P551.*` |
 | Librairies | `lib/` versionné, `build/` généré |
 | Documents | `doc/` — brochages, spécification, README des librairies |
