@@ -43,7 +43,10 @@ NUM = r'-?[\d.]+(?:[eE][-+]?\d+)?'
 
 PIN_RE = re.compile(
     r'\(pin\s+\S+\s+\S+\s+\(at\s+(' + NUM + r')\s+(' + NUM + r')\s+(\d+)\)'
-    r'.*?\(name\s+"([^"]+)"'
+    # Le nom peut etre vide — les symboles passifs de la librairie standard
+    # ecrivent (name "") — et le motif doit l'accepter, sinon la broche est
+    # ignoree en silence.
+    r'.*?\(name\s+"([^"]*)"'
     r'.*?\(number\s+"([^"]+)"',
     re.S,
 )
