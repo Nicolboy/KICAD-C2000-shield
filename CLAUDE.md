@@ -1,13 +1,14 @@
 # Projet PCB — KiCad 10, Windows
 
-cle github: ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIE4f3+cYDYeS9AhdrAqW053Hjwf6gioSQ3DBR904tEx9 contact@nicolasboyer.fr (github dans le dossier.ssh)
-
 ## Environnement
 - KiCad 10 doit être OUVERT avec le projet chargé. L'API IPC ne marche
   pas en headless sur cette version.
 - venv: .venv\Scripts\python.exe — kicad-python (kipy) installé.
 - kicad-cli est dans le PATH.
--https://github.com/Nicolboy/testkicad et main
+- Dépôt : https://github.com/Nicolboy/KICAD-C2000-shield, branche `main`.
+  Clé SSH de compte `~/.ssh/github_nicolboy`, sélectionnée par `~/.ssh/config`.
+  Ne jamais remettre de `core.sshCommand` dans le dépôt : ça contourne cette
+  configuration et fait échouer le push avec « denied to deploy key ».
 
 ## Règles
 - Committer avant toute modification (git).

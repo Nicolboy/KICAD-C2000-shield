@@ -1,4 +1,4 @@
-# C2000-shield
+# KICAD-C2000-shield
 
 Shield d'isolation et cartes devkit pour TMS320 C2000, conçus sous KiCad 10.
 Le brochage est décrit en Markdown, les symboles et les projets KiCad en sont
@@ -144,3 +144,17 @@ autres :
 - Les **16 voies ADC sortent toutes** pour 9 nécessaires, les 5 libres étant
   câblées jusqu'aux réserves de nappe. Une voie ajoutée plus tard se raccorde
   sans retoucher une seule carte.
+
+---
+
+## Licence
+
+[CERN-OHL-S v2](LICENSE) — CERN Open Hardware Licence, fortement réciproque.
+
+Tu peux étudier, modifier, fabriquer et distribuer ce matériel. En contrepartie,
+si tu distribues un produit fondé dessus, ou une version modifiée, tu dois
+publier les sources correspondantes sous la même licence.
+
+C'est la licence de référence du matériel libre, l'équivalent de la GPL côté
+logiciel. Si tu préfères une réciprocité limitée à la carte elle-même, ou pas de
+réciprocité du tout, les variantes CERN-OHL-W et CERN-OHL-P existent.
