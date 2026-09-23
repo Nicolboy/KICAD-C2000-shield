@@ -6270,7 +6270,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_1x28_P2.54mm_Vertical"
 			(at 279.4 59.69 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6424,7 +6424,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_1x28_P2.54mm_Vertical"
 			(at 279.4 160.02 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6578,7 +6578,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Package_QFP:LQFP-64_10x10mm_P0.5mm"
 			(at 127 101.6 0)
 			(show_name no)
 			(do_not_autoplace no)
