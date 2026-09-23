@@ -3,15 +3,14 @@
 
 Ne genere rien tout seul : fournit les primitives s-expression (fils,
 symboles d'alimentation, lecture de broches) et les gabarits de .kicad_pcb
-et .kicad_pro partages par gen_shield_2x24.py, gen_shield.py et
-gen_devkit.py.
+et .kicad_pro partages par gen_shield.py et gen_devkit.py.
 """
 
 import re
 import uuid
 from pathlib import Path
 
-# Carte format ESP32 devkit, cf. connecteur-2x24.md
+# Carte format ESP32 devkit, cf. doc/brochage-devkit.md
 BOARD_W = 64.0
 BOARD_H = 28.0
 BOARD_X = 100.0

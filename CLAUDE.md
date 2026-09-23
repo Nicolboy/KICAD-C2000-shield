@@ -22,16 +22,18 @@ cle github: ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIE4f3+cYDYeS9AhdrAqW053Hjwf6gioS
 2 couches, pistes 1mm mini, via 2mm et trou de 0,8mm, fabriqué a la maison
 (à remplir: nombre de couches, largeurs mini, vias, fabricant)
 
-# Projet — shield d'isolation C2000, connecteur 2 × 24
+# Projet — shield d'isolation C2000, connecteur 24 + 32
 
 ## Ce qui fait autorité
 
-`doc/brochage-2x24.md` **est** la source de vérité du brochage. Tout le reste en
-découle par génération.
+`doc/brochage-devkit.md` **est** la source de vérité du brochage : rangée A de
+24, rangée B de 32, soit 56 positions. Tout le reste en découle par génération.
 
-- Ne jamais éditer `build/*.kicad_sym` à la main. Modifier le `.md`, relancer
-  `python gen_symbole_2x24.py doc/brochage-2x24.md -o build/`.
+- Ne jamais éditer `build/*.kicad_sym` à la main. Modifier le `.md`, relancer le
+  générateur.
 - Si le symbole et le `.md` divergent, le `.md` a raison.
+- `doc/brochage-2x24.md` décrit le connecteur 2 × 24 **abandonné** le
+  2026-08-30. Conservé pour mémoire, il ne fait plus autorité sur rien.
 
 ## Organisation du dépôt
 
@@ -40,16 +42,17 @@ Un préfixe par groupe, le rôle dans le nom.
 | Groupe | Fichiers |
 |---|---|
 | Brique commune | `kicad_gen.py` — primitives s-expression, gabarits `.kicad_pcb` / `.kicad_pro`. Ne génère rien seul. |
-| Générateurs | `gen_symbole_2x24.py`, `gen_symbole_mcu.py`, `gen_shield_2x24.py`, `gen_shield.py`, `gen_devkit.py` |
-| Projets KiCad | `shield.*` (courant), `shield_2x24.*` (brochage antérieur), `devkit_A_F280037.*`, `devkit_B_F28P551.*` |
+| Générateurs | `gen_symbole_mcu.py`, `gen_shield.py`, `gen_devkit.py` |
+| Projets KiCad | `shield.*`, `devkit_A_F280037.*`, `devkit_B_F28P551.*` — **trois, pas un de plus** |
 | Librairies | `lib/` versionné, `build/` généré |
 | Documents | `doc/` — brochages, spécification, README des librairies |
 | Boîte de réception | `imports/` — **ignoré par git**, rien ne doit en dépendre à l'ouverture |
 
 ## Vérification avant tout commit
 
+Sur les trois projets : `shield`, `devkit_A_F280037`, `devkit_B_F28P551`.
+
 ```
-python gen_symbole_2x24.py doc/brochage-2x24.md --check   # doit sortir en 0
 kicad-cli sch erc --exit-code-violations <projet>.kicad_sch
 kicad-cli pcb drc --exit-code-violations <projet>.kicad_pcb
 ```
@@ -59,18 +62,34 @@ kicad-cli pcb drc --exit-code-violations <projet>.kicad_pcb
 Ces choix ont l'air d'inefficacités et n'en sont pas. Ne pas les « optimiser »
 sans décision explicite de ma part.
 
-1. **B10 à B13 en GPIO génériques.** En mux 1 ce sont `EPWM3_A/B` et
-   `EPWM4_A/B` — deux paires HRPWM complémentaires de réserve, gratuites. Les
-   renommer en PWM détruit le double usage et fait perdre les quatre commandes
-   du shield (Stage1_EN, Stage2_EN, HV_EN, Discharge).
-2. **Masse isolante de part et d'autre de I_SHUNT1, I_SHUNT2 et VREF_ADC.**
-   Non négociable, c'est de la mesure de courant.
-3. **11 voies ADC pour 7 nécessaires.** La marge est volontaire.
-4. **nRESET en drain ouvert uniquement.** Le MCU tire lui-même la ligne à zéro
+1. **PWM3 et PWM4 (B10 à B13) restent en réserve, et restent des PWM.** Ce sont
+   deux paires HRPWM complémentaires avec temps mort matériel, câblées de bout
+   en bout sur la nappe PWM alors que rien ne s'en sert encore. Ne pas les
+   réaffecter à une commande lente sous prétexte qu'elles sont libres : on
+   perdrait les deux seules paires complémentaires disponibles, et la nappe PWM
+   est la seule à alternance stricte pensée pour des fronts rapides. Les
+   commandes lentes du shield — Stage1_EN, Stage2_EN, HV_EN, Discharge — ont
+   leur propre nappe GPIO.
+2. **Alternance signal / masse stricte 1:1 sur les quatre nappes.** Non
+   négociable, c'est de la mesure de courant. Seule exception, voulue :
+   `VREF_ADC` et `VREFLO_SENSE` sont adjacents en A23/A24 et en positions 6/7
+   de la nappe ADC-2. C'est une paire de référence, pas deux signaux — les
+   séparer par une masse rendrait la mesure différentielle fausse au lieu de la
+   protéger.
+3. **Les 16 voies ADC du boîtier sortent toutes, pour 9 nécessaires.** Les cinq
+   libres — A11, A12, A14, A15, A16 — sont câblées jusqu'aux cinq réserves de
+   la nappe ADC-2, dans le même ordre. Une voie ajoutée plus tard se raccorde
+   sans retoucher une seule carte. Ne pas « récupérer » ces positions.
+4. **Chaque shunt sort deux fois : `_MES` filtré et `_CMP` direct.** Ça a l'air
+   d'un doublon et n'en est pas. Le chemin `_CMP` attaque le CMPSS sans filtre
+   anti-repliement, donc sans retard sur le déclenchement de la Trip Zone, et
+   un défaut sur le filtre ne désarme pas la protection. Ne jamais fusionner
+   les deux chemins ni insérer un filtre sur `_CMP` (Rs ≤ 50 Ω).
+5. **nRESET en drain ouvert uniquement.** Le MCU tire lui-même la ligne à zéro
    sur watchdog et brownout. Jamais de sortie push-pull côté shield.
-5. **Point de jonction VSS/VSSA unique**, près du boîtier, une seule masse au
+6. **Point de jonction VSS/VSSA unique**, près du boîtier, une seule masse au
    connecteur.
-6. **GND et +5V restent en `power_in`, avec un PWR_FLAG par net.** Le
+7. **GND et +5V restent en `power_in`, avec un PWR_FLAG par net.** Le
    connecteur alimente bien la carte, mais le brochage les décrit en entrée et
    c'est lui qui fait autorité. Un net qui n'a que des `power_in` fait lever
    `power_pin_not_driven` à l'ERC, même avec un symbole de masse dessus : le
@@ -79,9 +98,23 @@ sans décision explicite de ma part.
 
 ## Deux variantes de PCB
 
-F280037 et F28P551 partagent le connecteur (48 positions sur 48) mais divergent
-sur : LED bleue et rouge, VDDIO broche 28, VDD broche 27, VREGENZ broche 46.
-Toute divergence hors de cette liste est une erreur.
+F280037 et F28P551 partagent le connecteur **à 100 %, 56 positions sur 56**.
+C'est un arbitrage, pas une coïncidence : les LED sont posées sur les E/S non
+communes aux deux boîtiers, précisément pour que le connecteur reste identique.
+
+Les quatre divergences sont toutes locales à la carte devkit, aucune ne
+traverse le connecteur :
+
+| Broche | PCB A — F280037 | PCB B — F28P551 |
+|---|---|---|
+| 27 | VDD 1,2 V, découplage | LED bleue (GPIO20) |
+| 28 | VDDIO 3,3 V | LED rouge (GPIO21) |
+| 40 | LED rouge (GPIO32) | pastille de test |
+| 46 | LED bleue (GPIO39) | VREGENZ à VSS |
+
+Le fond de l'affaire est le régulateur 1,2 V : le F28P551 a le sien en interne,
+activé par VREGENZ à VSS ; le F280037 en 64 PM non-Q n'a pas cette broche et
+demande un LDO de plus. Toute divergence hors de cette liste est une erreur.
 
 ## Points ouverts — ne pas inventer de valeur
 
