@@ -114,8 +114,10 @@ Les schémas de devkit produits à la racine sont en revanche **jetables** — t
 retouche manuelle y est perdue au prochain `--force`. Ce qui doit survivre se
 modifie dans `src/` ou dans le générateur.
 
-Contraintes de fabrication : **2 couches**, pistes 1 mm minimum, vias 2 mm avec
-perçage 0,8 mm — dimensionné pour une fabrication maison.
+Chaque carte existe en **deux versions de fabrication** : 2 couches gravées à
+la maison — pistes 1 mm, vias 2 mm, perçage 0,8 mm — pour itérer vite sur la
+mécanique, et 4 couches en fabrication externe, avec plan de masse continu sous
+la zone analogique. Même schéma, même brochage, seul le PCB change.
 
 ---
 
@@ -140,7 +142,7 @@ pas une estimation.
 
 ## Décisions à ne pas défaire
 
-Certains choix ressemblent à des inefficacités sans en être. Les onze sont
+Certains choix ressemblent à des inefficacités sans en être. Les douze sont
 documentés dans [`doc/decisions.md`](doc/decisions.md), chacun avec sa raison et
 ce qui casse si on le défait — entre autres :
 

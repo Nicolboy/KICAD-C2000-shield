@@ -146,7 +146,9 @@ développement sans refouler de courant vers la carte de puissance.
 
 **Masses** : VSS et VSSA réunies en un point unique près du boîtier, sous les
 broches 21 et 26. Une seule masse au connecteur. Quatre couches recommandées,
-pour un plan continu sous la zone analogique.
+pour un plan continu sous la zone analogique — c'est la version de référence.
+Une variante 2 couches fabriquée à la maison sert au prototypage mécanique et
+fonctionnel, sans prétention sur le bruit (`decisions.md` §12).
 
 ---
 
@@ -196,7 +198,7 @@ libère GPIO32. Essayer via `EMU_BOOTPIN_CONFIG` avant de brûler l'OTP.
 | Rangée B | embase mâle 1 × 28, pas 2,54 mm |
 | **Entraxe des rangées** | **25,4 mm** (10 pas) |
 | Longueur | 28 × 2,54 = 71,1 mm |
-| Carte | ≈ 75 × 28 mm, 4 couches |
+| Carte | ≈ 75 × 28 mm, 4 couches (variante 2 couches en prototype) |
 | Horloge | interne, X1/X2 non câblés — GPIO18/GPIO19 libres pour le SPI |
 
 Embases mâles sous le devkit, femelles sur le shield, pour un retrait sans

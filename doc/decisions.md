@@ -233,6 +233,42 @@ seule autorité pendant l'intervalle — et vérifié position par position, 56 
 
 ---
 
+## 12. Deux versions de PCB : 2 couches maison, 4 couches externes
+
+**Décision.** Chaque carte est dessinée en deux variantes de fabrication :
+
+| | 2 couches | 4 couches |
+|---|---|---|
+| Fabrication | maison | externe |
+| Pistes mini | 1 mm | au choix du fabricant |
+| Vias | 2 mm, perçage 0,8 mm | standard |
+| Plan de masse | fragmenté, au mieux | **continu en couche 2** |
+| Statut | prototype, mise au point | version de référence |
+
+**Pourquoi.** La version maison permet d'itérer en quelques heures au lieu de
+quelques semaines, et de valider la mécanique — encombrements, entraxes,
+détrompage — avant d'engager un tirage externe.
+
+**Ce qui ne change pas d'une version à l'autre.** Le schéma, le brochage, le
+connecteur. Les deux variantes sortent du **même `.kicad_sch`** : seule la
+géométrie du PCB diffère. Dès qu'un signal change d'une version à l'autre, ce
+ne sont plus deux variantes mais deux cartes, et la comparaison des mesures ne
+veut plus rien dire.
+
+**Ce qu'il faut savoir de la version 2 couches.** Sans plan de masse continu
+sous la zone analogique, les retours de courant partagent des chemins et la
+mesure en pâtit — c'est l'objet même de la décision §3. Attendre d'elle une
+validation fonctionnelle et mécanique, **pas** une caractérisation en bruit ni
+un chiffre de précision : ils ne se transposeraient pas à la version 4 couches.
+
+**Conséquence sur l'outillage.** Les règles de conception écrites par
+`kicad_gen.py` — piste 1 mm, via 2 mm, perçage 0,8 mm — sont celles de la
+fabrication maison. Le projet 4 couches demandera son propre jeu de règles, bien
+plus fin. Ne pas appliquer les contraintes maison à la version externe : ce
+serait payer un fabricant pour des pistes de 1 mm.
+
+---
+
 ## Points ouverts — ne pas combler par une estimation
 
 Ces valeurs manquent. Elles demandent une lecture de datasheet ou une mesure,
@@ -252,8 +288,6 @@ pas une approximation plausible.
 - Débit SCI maximal accepté par l'autobaud du bootloader : il fixe la durée
   d'indisponibilité pendant une mise à jour.
 - Matériel LFU dédié sur le F28P551 : documenté pour le F28003x, à confirmer.
-- **Nombre de couches du devkit.** `spec-devkit.md` recommande quatre couches
-  pour un plan de masse continu sous la zone analogique ; la contrainte de
-  fabrication du `CLAUDE.md` est de deux, en fabrication maison. Les deux ne
-  tiennent pas ensemble — arbitrage à faire, ce n'est pas un détail de confort
-  sur une chaîne de mesure de courant.
+- Répartition exacte des plans sur la version 4 couches : masse pleine en
+  couche 2 est acquis, la couche 3 reste à décider (alimentation, ou seconde
+  masse sous la zone analogique).

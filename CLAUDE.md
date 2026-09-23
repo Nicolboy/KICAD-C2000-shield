@@ -20,8 +20,19 @@
   et me rapporter les erreurs sans les corriger d'office.
 
 ## Contraintes fab
-2 couches, pistes 1mm mini, via 2mm et trou de 0,8mm, fabriqué a la maison
-(à remplir: nombre de couches, largeurs mini, vias, fabricant)
+
+**Deux versions de chaque carte**, même schéma, PCB différents
+(`doc/decisions.md` §12).
+
+| | 2 couches — maison | 4 couches — externe |
+|---|---|---|
+| Pistes mini | 1 mm | au choix du fabricant |
+| Vias | 2 mm, perçage 0,8 mm | standard |
+| Plan de masse | fragmenté | continu en couche 2 |
+| Rôle | prototype, mécanique | version de référence |
+
+Les règles écrites par `kicad_gen.py` sont celles de la version maison. Ne pas
+les appliquer à la version externe. Fabricant du 4 couches : à choisir.
 
 # Projet — shield d'isolation C2000, connecteur 2 × 28
 
@@ -83,7 +94,7 @@ kicad-cli pcb drc --exit-code-violations <projet>.kicad_pcb
 
 ## Décisions de conception et points ouverts
 
-`doc/decisions.md` **fait autorité**. Onze décisions qui ont l'air
+`doc/decisions.md` **fait autorité**. Douze décisions qui ont l'air
 d'inefficacités et n'en sont pas, chacune avec sa raison et ce qui casse si on
 la défait — plus les valeurs encore manquantes.
 
