@@ -55,10 +55,12 @@ PROJECTS = [
     ("devkit_B_F28P551", SRC / "devkit_c2000_B_F28P551.kicad_sch"),
 ]
 
-# Contour provisoire : chaque rangee fait 28 positions au pas 2,54, soit une
-# carte de 71 mm de long (doc/README-lib.md). Dimension a confirmer.
-BOARD_W = 90.0
-BOARD_H = 45.0
+# Contour du devkit, doc/spec-devkit.md §6 : 28 positions au pas 2,54 font
+# 71,1 mm de connecteur, la carte fait ~75 x 28 mm. Entraxe des rangees
+# 25,4 mm — a ne pas confondre avec les 22,86 mm de l'ESP32-C6 sur le shield.
+BOARD_W = 75.0
+BOARD_H = 28.0
+ENTRAXE = 25.4
 
 
 # Position de l'instance du MCU sur la feuille. Les fichiers fournis la

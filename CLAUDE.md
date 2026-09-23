@@ -27,8 +27,10 @@
 
 ## Ce qui fait autorité
 
-`doc/brochage-devkit.md` **est** la source de vérité du brochage : deux rangées
-de 28, soit 56 positions. Tout le reste en découle par génération.
+`doc/spec-devkit.md` **est** la source de vérité : connecteur 2 × 28 d'entraxe
+25,4 mm, attribution des 64 broches, alimentation, JTAG, mécanique.
+`doc/nappes-shield.md` décrit les quatre nappes vers la carte de puissance.
+Tout le reste en découle par génération.
 
 - Ne jamais éditer `build/*.kicad_sym` à la main. Modifier le `.md`, relancer le
   générateur.
@@ -54,7 +56,7 @@ Un préfixe par groupe, le rôle dans le nom.
 | Projets KiCad | `shield.*`, `devkit_A_F280037.*`, `devkit_B_F28P551.*` — **trois, pas un de plus** |
 | Sources | `src/` — schémas source des devkits, **versionnés** |
 | Librairies | `lib/` versionné, `build/` généré |
-| Documents | `doc/` — brochages, décisions, spécification, README des librairies |
+| Documents | `doc/` — spécification, nappes, décisions, README des librairies |
 | Boîte de réception | `imports/` — **ignoré par git**, rien ne doit en dépendre à l'ouverture |
 
 ## Quel schéma éditer — à lire avant d'ouvrir KiCad
@@ -81,7 +83,7 @@ kicad-cli pcb drc --exit-code-violations <projet>.kicad_pcb
 
 ## Décisions de conception et points ouverts
 
-`doc/decisions.md` **fait autorité**. Huit décisions qui ont l'air
+`doc/decisions.md` **fait autorité**. Onze décisions qui ont l'air
 d'inefficacités et n'en sont pas, chacune avec sa raison et ce qui casse si on
 la défait — plus les valeurs encore manquantes.
 

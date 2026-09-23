@@ -2,7 +2,7 @@
 
 Remplace tous les documents de brochage antérieurs. Deux PCB à partir d'un seul
 schéma, `DEVKIT_C2000_A` pour le F280037CSPM et `DEVKIT_C2000_B` pour le
-F28P551SG5PM.
+F28P551SG5PM. Connecteur 2 × 28, entraxe 25,4 mm.
 
 Les 64 broches sont attribuées et vérifiées sur les deux variantes.
 
@@ -13,7 +13,7 @@ Les 64 broches sont attribuées et vérifiées sur les deux variantes.
 | Point | Avant | Maintenant |
 |---|---|---|
 | Cible | F28027 + deux 64 broches | **F280037 et F28P551 seuls** |
-| Connecteur | 2 × 32, symétrique | **rangée A 1×24, rangée B 1×32** |
+| Connecteur | 2 × 32, symétrique | **2 × 28, rangées symétriques** |
 | Alimentation au connecteur | +3V3, +3V3_A, +5V | **+5V et masses uniquement** |
 | Origine du 5 V | USB du devkit | **carte de puissance**, USB en secours |
 | I2C | GPIO32 / GPIO33 | **GPIO8 / GPIO10**, mux 9 |
@@ -28,43 +28,80 @@ Les 64 broches sont attribuées et vérifiées sur les deux variantes.
 
 ## 2. Attribution des 64 broches
 
-### Rangée A — analogique, 1 × 24
+### Rangée A — analogique, 1 × 28
 
-| Broche | Position | Signal | Broche | Position | Signal |
-|---|---|---|---|---|---|
-| 6 | A2 | Vin | 19 | A14 | ADC_10 |
-| 7 | A3 | Vout | 20 | A15 | ADC_11 |
-| 8 | A4 | V1 | 23 | A16 | ADC_12 |
-| 10 | A6 | Temp1 | 13 | A18 | I_SHUNT1_MES |
-| 11 | A7 | Temp2 | 9 | A19 | **I_SHUNT1_CMP** |
-| 12 | A8 | Iin | 24 | A21 | I_SHUNT2_MES |
-| 14 | A10 | Iout | 25 | A22 | **I_SHUNT2_CMP** |
-| 15 | A11 | ADC_8 | 16 | A23 | VREF_ADC (VREFHI) |
-| 18 | A12 | ADC_9 | 17 | A24 | VREFLO_SENSE |
+| Pos | Signal | Broche | Canaux ADC / note |
+|---|---|---|---|
+| A1 | GND | 21 (VSSA) | — |
+| A2 | Vin | 6 | A6 |
+| A3 | Vout | 7 | B2/C6 |
+| A4 | GND | — | — |
+| A5 | V1 | 8 | A3/B3/C5 |
+| A6 | Temp1 | 10 | A15/B9/C7 |
+| A7 | GND | — | — |
+| A8 | Temp2 | 11 | A14/B14/C4 |
+| A9 | Iin | 12 | A11/B10/C0 |
+| A10 | GND | — | — |
+| A11 | Iout | 14 | A1/B7 |
+| A12 | ADC_8 | 15 | A0/B15/C15 |
+| A13 | GND | — | — |
+| A14 | ADC_9 | 18 | A12/C1 |
+| A15 | ADC_10 | 19 | A7/C3 |
+| A16 | GND | — | — |
+| A17 | ADC_11 | 20 | A8/B0/C11 |
+| A18 | ADC_12 | 23 | A4/B8/C14 |
+| A19 | GND | — | — |
+| A20 | I_SHUNT1_MES | 13 | A5/B12/C2 |
+| A21 | GND | — | — |
+| A22 | I_SHUNT1_CMP | 9 | A2/B6/C9 - CMP1_HP0 |
+| A23 | GND | — | — |
+| A24 | I_SHUNT2_MES | 24 | A9/B4/C8 |
+| A25 | GND | — | — |
+| A26 | I_SHUNT2_CMP | 25 | A10/B1/C10 - CMP2_HP3 |
+| A27 | VREF_ADC | 16 | VREFHI |
+| A28 | VREFLO_SENSE | 17 | VREFLO |
 
-Masses en A1, A5, A9, A13, A17, A20. A1 rejoint VSSA (broche 21).
+Dix masses pour dix-huit signaux. **Chaque ligne de shunt est encadrée de masses
+des deux côtés.** A1 rejoint VSSA (broche 21). VREF_ADC et VREFLO_SENSE forment
+une paire de référence en fin de rangée.
 
-### Rangée B — numérique, 1 × 32
+### Rangée B — numérique, 1 × 28
 
-| Broche | Position | Signal | Broche | Position | Signal |
-|---|---|---|---|---|---|
-| 3 | B3 | nRESET (XRSn) | 47 | B17 | I2C_SCL |
-| 35 | B4 | BOOT_SEL | 63 | B18 | I2C_SDA |
-| 52 | B5 | PWM1_A | 41 | B19 | SPI_CLK |
-| 51 | B6 | PWM1_B | 33 | B20 | SPI_SIMO |
-| 50 | B7 | PWM2_A | 34 | B21 | SPI_SOMI |
-| 49 | B8 | PWM2_B | 42 | B22 | SPI_STE |
-| 48 | B10 | PWM3_A | 29 | B24 | CAN_TX |
-| 61 | B11 | PWM3_B | 30 | B25 | CAN_RX |
-| 64 | B12 | PWM4_A | 31 | B26 | CMP_OUT1 |
-| 57 | B13 | PWM4_B | 62 | B27 | CMP_OUT2 |
-| 1 | B15 | UART_TX | 56 | B28 | CLB_OUT1 |
-| 2 | B16 | UART_RX | 54 | B29 | CLB_OUT2 |
-| | | | 32 | B30 | GPIO_1 |
-| | | | 53 | B31 | GPIO_2 |
-| | | | 55 | B32 | GPIO_3 |
+| Pos | Signal | Broche | GPIO, fonction et mux |
+|---|---|---|---|
+| B1 | GND | 5/26/45/58 | — |
+| B2 | +5V | — | — |
+| B3 | nRESET | 3 | XRSn |
+| B4 | BOOT_SEL | 35 | GPIO24 mux0 - BMSP1 |
+| B5 | PWM1_A | 52 | GPIO0 EPWM1_A mux1 |
+| B6 | PWM1_B | 51 | GPIO1 EPWM1_B mux1 |
+| B7 | PWM2_A | 50 | GPIO2 EPWM2_A mux1 |
+| B8 | PWM2_B | 49 | GPIO3 EPWM2_B mux1 |
+| B9 | GND | — | — |
+| B10 | PWM3_A | 48 | GPIO4 EPWM3_A mux1 |
+| B11 | PWM3_B | 61 | GPIO5 EPWM3_B mux1 |
+| B12 | PWM4_A | 64 | GPIO6 EPWM4_A mux1 |
+| B13 | PWM4_B | 57 | GPIO7 EPWM4_B mux1 |
+| B14 | GND | — | — |
+| B15 | UART_TX | 1 | GPIO29 SCIA_TX mux1 |
+| B16 | UART_RX | 2 | GPIO28 SCIA_RX mux1 |
+| B17 | I2C_SCL | 47 | GPIO8 I2CA_SCL mux9 |
+| B18 | I2C_SDA | 63 | GPIO10 I2CA_SDA mux9 |
+| B19 | SPI_CLK | 41 | GPIO18 SPIA_CLK mux1 |
+| B20 | SPI_SIMO | 33 | GPIO16 SPIA_SIMO mux1 |
+| B21 | SPI_SOMI | 34 | GPIO17 SPIA_SOMI mux1 |
+| B22 | SPI_STE | 42 | GPIO19 SPIA_STE mux1 |
+| B23 | GND | — | — |
+| B24 | CAN_TX | 29 | GPIO13 MCAN_TX mux3 |
+| B25 | CAN_RX | 30 | GPIO12 MCAN_RX mux3 |
+| B26 | CMP_OUT | 31 | GPIO11 OUTPUTXBAR7 mux3 |
+| B27 | CLB_OUT | 56 | GPIO22 CLB_OUTPUTXBAR1 mux10 |
+| B28 | GPIO_1 | 32 | GPIO33 mux0 - nFAULT |
 
-Masses en B1, B9, B14, B23. +5V en B2.
+Vingt-quatre signaux, quatre masses. Retirés par rapport à la version 24/32 :
+CMP_OUT2, CLB_OUT2, GPIO_2 et GPIO_3 — les broches 62, 54, 53 et 55 deviennent
+des pastilles de test. Un seul OUTPUTXBAR peut agréger plusieurs sources CMPSS,
+et une sortie CLB suffit à l'observation.
 
 ### Hors connecteur
 
@@ -82,8 +119,8 @@ Masses en B1, B9, B14, B23. +5V en B2.
 | **40** | **LED rouge (GPIO32)** | pastille de test (GPIO32) |
 | **46** | **LED bleue (GPIO39)** | **VREGENZ à VSS** |
 
-Bilan : 45 broches au connecteur, 4 en JTAG, 13 en alimentation et 2 sur le
-devkit pour le PCB A ; 45, 4, 11 et 4 pour le PCB B.
+Bilan : 41 broches au connecteur, 4 en JTAG, 4 en pastilles de test, plus
+alimentations et LED.
 
 ---
 
@@ -155,18 +192,32 @@ libère GPIO32. Essayer via `EMU_BOOTPIN_CONFIG` avant de brûler l'OTP.
 |---|---|
 | Boîtier | LQFP64 PM, 10 × 10 mm corps, 12 mm hors tout |
 | Empreinte KiCad | `Package_QFP:LQFP-64_10x10mm_P0.5mm` |
-| Rangée A | embase mâle 1 × 24, pas 2,54 mm |
-| Rangée B | embase mâle 1 × 32, pas 2,54 mm |
-| Entraxe des rangées | **25,4 mm** (10 pas) |
-| Longueur | fixée par la rangée B : 32 × 2,54 = 81,3 mm |
-| Carte | ≈ 85 × 28 mm, 4 couches |
+| Rangée A | embase mâle 1 × 28, pas 2,54 mm |
+| Rangée B | embase mâle 1 × 28, pas 2,54 mm |
+| **Entraxe des rangées** | **25,4 mm** (10 pas) |
+| Longueur | 28 × 2,54 = 71,1 mm |
+| Carte | ≈ 75 × 28 mm, 4 couches |
 | Horloge | interne, X1/X2 non câblés — GPIO18/GPIO19 libres pour le SPI |
 
-Les embases sont mâles sous le devkit, femelles sur le shield, pour un retrait
-sans outil. Le devkit doit se trouver **au-dessus de la zone commande** du
-shield.
+Embases mâles sous le devkit, femelles sur le shield, pour un retrait sans
+outil. Le devkit se place **au-dessus de la zone commande** du shield.
 
----
+### Détrompage
+
+Les deux rangées faisant désormais la même longueur, la géométrie n'assure plus
+le détrompage. Prévoir une clé : position obturée aux extrémités, ou ergot sur
+le support. Sans elle, un montage à l'envers met le +5V de B2 sur VSSA.
+
+### Cohabitation avec l'ESP32 sur le shield
+
+L'ESP32-C6-DevKitC-1 a ses propres cotes, relevées dans son plan d'implantation
+v1.2 : **entraxe 22,86 mm**, carte 51,8 × 25,4 mm, embases J1 et J3 au pas
+2,54 mm. Le 1,27 mm mentionné sur le plan concerne J2 et J4, l'empreinte du
+module, sans objet ici.
+
+Le shield porte donc **deux entraxes différents** : 25,4 mm pour le devkit C2000,
+22,86 mm pour l'ESP32. Deux références de support à approvisionner, mais le
+dégagement de routage autour du LQFP64 est préservé — c'est le choix retenu.
 
 ## 7. Nomenclature indicative
 

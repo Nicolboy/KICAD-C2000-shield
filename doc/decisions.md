@@ -9,7 +9,8 @@ plus tard, faute de se rappeler ce qu'ils protégeaient. Chaque entrée dit donc
 trois choses : la décision, sa raison, et ce qui casse si on la défait.
 
 Ce fichier fait autorité sur les décisions. Le brochage, lui, est décrit dans
-[`brochage-devkit.md`](brochage-devkit.md).
+[`spec-devkit.md`](spec-devkit.md), les nappes dans
+[`nappes-shield.md`](nappes-shield.md).
 
 ---
 
@@ -225,8 +226,8 @@ branchée à l'envers met le +5 V de B2 sur une entrée analogique.
 C'est la contrainte la plus facile à oublier et la plus coûteuse à découvrir
 après fabrication.
 
-**Trace.** Le basculement date du 2026-08-30, vers 15 h 25. `doc/brochage-devkit.md`
-a été reconstruit depuis `lib/C2000_Devkit_Connectors.kicad_sym` — qui faisait
+**Trace.** Le basculement date du 2026-08-30, vers 15 h 25. `doc/spec-devkit.md`
+a été recalé depuis `lib/C2000_Devkit_Connectors.kicad_sym` — qui faisait
 seule autorité pendant l'intervalle — et vérifié position par position, 56 sur
 56.
 
@@ -250,3 +251,9 @@ pas une approximation plausible.
 - Nombre de banques Flash des deux MCU, pour le FOTA.
 - Débit SCI maximal accepté par l'autobaud du bootloader : il fixe la durée
   d'indisponibilité pendant une mise à jour.
+- Matériel LFU dédié sur le F28P551 : documenté pour le F28003x, à confirmer.
+- **Nombre de couches du devkit.** `spec-devkit.md` recommande quatre couches
+  pour un plan de masse continu sous la zone analogique ; la contrainte de
+  fabrication du `CLAUDE.md` est de deux, en fabrication maison. Les deux ne
+  tiennent pas ensemble — arbitrage à faire, ce n'est pas un détail de confort
+  sur une chaîne de mesure de courant.

@@ -54,12 +54,12 @@ demande un LDO supplémentaire.
 
 ## Le brochage est du code
 
-Le fichier [`doc/brochage-devkit.md`](doc/brochage-devkit.md) fait autorité. Les
+Le fichier [`doc/spec-devkit.md`](doc/spec-devkit.md) fait autorité. Les
 symboles KiCad, les schémas et les vérifications en découlent par génération —
 on ne modifie jamais un `.kicad_sym` à la main.
 
 ```
-doc/brochage-devkit.md        source de vérité, relue par un humain
+doc/spec-devkit.md            source de vérité, relue par un humain
         │
         ├── gen_symbole_mcu.py   → build/C2000_MCU_LQFP64.kicad_sym
         │                          (dimensionne le symbole depuis les noms)
@@ -140,7 +140,7 @@ pas une estimation.
 
 ## Décisions à ne pas défaire
 
-Certains choix ressemblent à des inefficacités sans en être. Les huit sont
+Certains choix ressemblent à des inefficacités sans en être. Les onze sont
 documentés dans [`doc/decisions.md`](doc/decisions.md), chacun avec sa raison et
 ce qui casse si on le défait — entre autres :
 

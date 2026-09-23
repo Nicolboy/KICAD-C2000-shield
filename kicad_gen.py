@@ -14,7 +14,7 @@ import re
 import uuid
 from pathlib import Path
 
-# Carte format ESP32 devkit, cf. doc/brochage-devkit.md
+# Carte format ESP32 devkit, cf. doc/spec-devkit.md
 BOARD_W = 64.0
 BOARD_H = 28.0
 BOARD_X = 100.0
