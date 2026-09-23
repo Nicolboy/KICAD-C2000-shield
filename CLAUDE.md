@@ -33,8 +33,10 @@
 - Ne jamais éditer `build/*.kicad_sym` à la main. Modifier le `.md`, relancer le
   générateur.
 - Si le symbole et le `.md` divergent, le `.md` a raison.
-- `doc/brochage-2x24.md` décrit le connecteur 2 × 24 **abandonné** le
-  2026-08-30. Conservé pour mémoire, il ne fait plus autorité sur rien.
+- Le connecteur 2 × 24 a été abandonné le 2026-08-30. Toute sa chaîne — projet,
+  générateur, brochage — est sortie du dépôt, jusqu'au commit `2b16f77` qui la
+  garde. Ne pas la réintroduire « pour mémoire » : un brochage périmé dans
+  `doc/` se lit comme un brochage courant.
 
 ## Organisation du dépôt
 
