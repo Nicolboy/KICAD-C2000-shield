@@ -20,7 +20,7 @@ Les 64 broches sont attribuées et vérifiées sur les deux variantes.
 | Reset | bouton seul | **bouton + nRESET en B3** |
 | Mode de boot | non résolu | **GPIO24 en B4**, BMSP unique par OTP |
 | Voies shunt | une broche chacune | **dédoublées**, mesure + comparateur |
-| LED | GPIO24 et GPIO32 | **E/S non communes**, voir §5 |
+| LED | GPIO24 et GPIO32 | **GPIO40 et GPIO23**, communes aux deux, voir §5 |
 | VREFLO | non exportée | **exportée**, paire avec VREFHI |
 | Isolation, NCM3 | sur le shield | **carte de puissance** |
 
@@ -114,10 +114,10 @@ et une sortie CLB suffit à l'observation.
 | 4, 44, 59 | VDD 1,2 V, découplage | idem |
 | 43, 60 | VDDIO 3,3 V | idem |
 | 5, 26, 45, 58 | VSS | idem |
-| **27** | **VDD 1,2 V, découplage** | **LED bleue (GPIO20)** |
-| **28** | **VDDIO 3,3 V** | **LED rouge (GPIO21)** |
-| **40** | **LED rouge (GPIO32)** | pastille de test (GPIO32) |
-| **46** | **LED bleue (GPIO39)** | **VREGENZ à VSS** |
+| **27** | **VDD 1,2 V, découplage** | pastille (GPIO20) |
+| **28** | **VDDIO 3,3 V** | pastille (GPIO21) |
+| **40** | pastille (GPIO32) | pastille (GPIO32) |
+| **46** | pastille (GPIO39) | **VREGENZ à VSS** |
 
 Bilan : 41 broches au connecteur, 4 en JTAG, 4 en pastilles de test, plus
 alimentations et LED.
@@ -156,8 +156,19 @@ fonctionnel, sans prétention sur le bruit (`decisions.md` §12).
 
 ## 4. JTAG et reset
 
-Embase **cTBP 10 points** : TCK 36, TDO 37, TMS 38, TDI 39, plus XRSn, 3,3 V et
-masse.
+Embase **Tag-Connect TC2050**, 10 points au pas 1,27 mm, sans connecteur monté
+côté carte. Brochage standard TI :
+
+| Broche | Signal | Broche | Signal |
+|---|---|---|---|
+| 1 | GND | 6 | libre |
+| 2 | TCK (36) | 7 | XRSn (3) |
+| 3 | TDO (37) | 8 | libre |
+| 4 | TMS (38) | 9 | libre |
+| 5 | TDI (39) | 10 | VDDIO 3,3 V |
+
+Les broches 6, 8 et 9 restent libres : la 6 porte TRSTn sur les cibles qui en
+ont une, et ce composant n'en a pas.
 
 **Ces MCU n'ont pas de broche TRSTn.** Vérifié dans SPRSPC5 §5.3 et §5.4, qui
 l'écrit deux fois : « This device does not have a TRSTn pin ». Prévoir un
@@ -169,24 +180,22 @@ F28027.
 à relier au RESET du connecteur JTAG — drain ouvert, la sonde peut le tirer bas.
 TRST est le reset de la chaîne JTAG, et il n'existe pas ici.
 
-**Reset** : bouton-poussoir vers VSS sur XRSn (broche 3), rappel 2,2 à 10 kΩ vers
-VDDIO, condensateur ≤ 100 nF vers VSS. La même broche sort en B3, attaquée **en
+**Reset** : **cavalier 2 points au pas 2,54 mm** vers VSS sur XRSn (broche 3),
+en remplacement du bouton-poussoir, avec rappel de 10 kΩ vers VDDIO et
+condensateur de 100 nF vers VSS. La même broche sort en B3, attaquée **en
 drain ouvert uniquement** par l'extérieur.
 
 ---
 
-## 5. LED et cavalier de boot
+## 5. LED et sélection du boot
 
-Les LED sont posées sur les **E/S non communes**, ce qui rend le connecteur
-identique à 100 % sur les deux PCB.
+Les LED étaient initialement posées sur les **E/S non communes** — GPIO39 et
+GPIO32 sur le PCB A, GPIO20 et GPIO21 sur le PCB B — pour que le connecteur
+reste identique à 100 %. Ce placement a été abandonné : GPIO32 est l'une des
+deux broches de sélection du boot et ne peut rien porter d'autre. Voir plus bas.
 
-| | PCB A — F280037 | PCB B — F28P551 |
-|---|---|---|
-| LED bleue | GPIO39, broche 46 | GPIO20, broche 27 |
-| LED rouge | GPIO32, broche 40 | GPIO21, broche 28 |
-
-GPIO20 et GPIO21 sont des broches analogiques sur le F28P551 : le firmware doit
-écrire `GPIOHAMSEL` pour les utiliser en numérique.
+Les LED sont désormais **identiques sur les deux PCB**, sur deux broches
+communes libérées du connecteur.
 
 **Modes retenus : Flash seul.** Le chargement en RAM se fait par le JTAG, qui
 arrête le cœur et écrit directement — il ne demande aucun mode de boot.
@@ -290,7 +299,7 @@ dégagement de routage autour du LQFP64 est préservé — c'est le choix retenu
 | LDO VDDA | 3,3 V, ≥ 100 mA, **faible bruit prioritaire** |
 | OR-ing | 2 × Schottky, chute faible |
 | USB | connecteur seul, alimentation de secours en développement |
-| JTAG | embase cTBP 10 points, pas 1,27 mm |
+| JTAG | embase Tag-Connect TC2050, 10 points, pas 1,27 mm |
 | Reset | poussoir tactile + 10 kΩ + 100 nF |
 | LED | 2 × 0603, résistances selon 4 mA |
 | Découplage | 100 nF par broche d'alimentation, 10 µF sur VDD, 2,2 µF sur VDDA, 2,2 µF entre VREFHI et VREFLO |
@@ -303,10 +312,12 @@ dégagement de routage autour du LQFP64 est préservé — c'est le choix retenu
 - Valeur de VREFHI en mode externe : 2,5 V ou 3,0 V, selon la pleine échelle des
   AMC ratiométriques. Plage admissible, impédance de source et courant absorbé
   restent `à vérifier`.
-- État au reset de GPIO39 sur le PCB A, pour que la LED bleue ne s'allume pas
-  pendant le démarrage.
-- Tenue de GPIO20 et GPIO21 en sortie sur le PCB B : le mode 20 mA du F28P551
-  (`IO_DRVSEL`) n'est pas vérifié dans SPRSPC5, considérer 4 mA.
+- État au reset de GPIO40 et GPIO23, pour que les LED ne s'allument pas pendant
+  le démarrage. Sans objet pour le boot — ces broches n'y participent plus —
+  mais une LED allumée au reset se lit comme un défaut.
+- Courant de sortie de GPIO40 et GPIO23 : le mode 20 mA du F28P551
+  (`IO_DRVSEL`) n'est pas vérifié dans SPRSPC5, considérer 4 mA. Avec 1 kΩ sur
+  la cathode commune, la LED tire environ 1,3 mA — largement dans la marge.
 - Placement exact du point de jonction VSS/VSSA par rapport aux broches 21 et 26
   et à l'arrivée du +5V en B2.
 - Choix de l'entraxe si vous préférez 22,86 mm : vérifier qu'il reste de la place
