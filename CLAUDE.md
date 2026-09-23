@@ -23,12 +23,12 @@
 2 couches, pistes 1mm mini, via 2mm et trou de 0,8mm, fabriqué a la maison
 (à remplir: nombre de couches, largeurs mini, vias, fabricant)
 
-# Projet — shield d'isolation C2000, connecteur 24 + 32
+# Projet — shield d'isolation C2000, connecteur 2 × 28
 
 ## Ce qui fait autorité
 
-`doc/brochage-devkit.md` **est** la source de vérité du brochage : rangée A de
-24, rangée B de 32, soit 56 positions. Tout le reste en découle par génération.
+`doc/brochage-devkit.md` **est** la source de vérité du brochage : deux rangées
+de 28, soit 56 positions. Tout le reste en découle par génération.
 
 - Ne jamais éditer `build/*.kicad_sym` à la main. Modifier le `.md`, relancer le
   générateur.
@@ -37,6 +37,11 @@
   générateur, brochage — est sortie du dépôt, jusqu'au commit `2b16f77` qui la
   garde. Ne pas la réintroduire « pour mémoire » : un brochage périmé dans
   `doc/` se lit comme un brochage courant.
+- Le même jour, la répartition 24 + 32 a été remplacée par 28 + 28. Le brochage
+  n'avait pas suivi et a décrit un connecteur inexistant jusqu'au 23 septembre.
+  Leçon : `lib/C2000_Devkit_Connectors.kicad_sym` n'est **pas généré**, rien ne
+  vérifie qu'il suit le `.md`. Après toute modification de l'un, comparer les
+  deux à la main — ou écrire le générateur qui manque (`decisions.md` §11).
 
 ## Organisation du dépôt
 

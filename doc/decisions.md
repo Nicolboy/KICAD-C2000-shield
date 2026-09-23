@@ -71,7 +71,7 @@ signal lui-même, la boucle reste petite, la diaphonie s'effondre.
 **Ce qui casse.** Récupérer une masse pour y passer un signal de plus donne un
 conducteur gratuit et une mesure qui dérive sans qu'on sache pourquoi.
 
-**Exception, voulue.** `VREF_ADC` et `VREFLO_SENSE` sont **adjacents** — A23/A24
+**Exception, voulue.** `VREF_ADC` et `VREFLO_SENSE` sont **adjacents** — A27/A28
 au connecteur, positions 6 et 7 de la nappe ADC-2. C'est une paire de référence,
 pas deux signaux indépendants : la conversion est ramenée à
 (VIN − VREFLO) / (VREFHI − VREFLO). Les séparer par une masse rendrait la mesure
@@ -109,7 +109,7 @@ unique. Contrainte à respecter : Rs ≤ 50 Ω sur le chemin comparateur.
 ## 5. Les 16 voies ADC sortent toutes, pour 9 nécessaires
 
 **Décision.** Toutes les voies ADC du boîtier sont exportées. Les cinq libres —
-A11, A12, A14, A15, A16 — sont câblées jusqu'aux cinq réserves de la nappe
+A12, A14, A15, A17, A18 — sont câblées jusqu'aux cinq réserves de la nappe
 ADC-2, dans le même ordre.
 
 **Pourquoi.** Une voie de mesure ajoutée plus tard se raccorde de bout en bout
@@ -203,6 +203,32 @@ source hors de lui-même.
 **Ce qui casse.** Remettre `PROJECTS` sur `imports/` : le jour où ce dossier
 disparaît, les deux devkits ne sont plus régénérables et rien ne le signale
 avant qu'on essaie.
+
+---
+
+## 11. Deux rangées égales de 28, et une clé mécanique obligatoire
+
+**Décision.** Le connecteur fait 28 + 28, pas 24 + 32. Quatre signaux ont été
+retirés pour que les deux rangées tiennent : `CMP_OUT2`, `CLB_OUT2`, `GPIO_2` et
+`GPIO_3`. Les broches MCU correspondantes — 62, 54, 53 et 55 — deviennent des
+pastilles de test. `CMP_OUT1` et `CLB_OUT1` perdent leur indice.
+
+**Pourquoi.** Deux rangées identiques, c'est un seul type de support, une seule
+référence à approvisionner, et un dessin de carte symétrique.
+
+**Ce qui casse — et c'est le point à ne pas oublier.** L'asymétrie 24/32
+assurait le détrompage toute seule : une rangée de 24 n'entre pas dans un
+support de 32. Ce n'est plus le cas. **Il faut une clé mécanique explicite** —
+position obturée aux extrémités, ou ergot sur le support. Sans elle, une carte
+branchée à l'envers met le +5 V de B2 sur une entrée analogique.
+
+C'est la contrainte la plus facile à oublier et la plus coûteuse à découvrir
+après fabrication.
+
+**Trace.** Le basculement date du 2026-08-30, vers 15 h 25. `doc/brochage-devkit.md`
+a été reconstruit depuis `lib/C2000_Devkit_Connectors.kicad_sym` — qui faisait
+seule autorité pendant l'intervalle — et vérifié position par position, 56 sur
+56.
 
 ---
 

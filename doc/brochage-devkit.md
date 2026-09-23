@@ -4,29 +4,54 @@ Intègre tous les arbitrages : I2C conservé, reset et sélection de boot
 réintroduits, voies shunt dédoublées, isolation et NCM3 sur la carte de
 puissance, OLED en SPI sur l'ESP32.
 
-Connecteur devkit : **rangée A de 24, rangée B de 32**, soit 56 positions.
-Identique sur les deux PCB (F280037CSPM et F28P551SG5PM).
+Connecteur devkit : **deux rangées de 28**, soit 56 positions. Identique sur les
+deux PCB (F280037CSPM et F28P551SG5PM).
+
+> **Ce document est reconstruit depuis `lib/C2000_Devkit_Connectors.kicad_sym`**,
+> qui est la bibliothèque réellement utilisée par les trois schémas. En cas de
+> doute, c'est elle qui tranche : les positions ci-dessous en sont extraites,
+> pas recopiées.
+
+## 0. Pourquoi deux rangées égales
+
+La version précédente répartissait 24 + 32. Le passage au symétrique coûte
+quatre signaux, retirés faute de place : `CMP_OUT2`, `CLB_OUT2`, `GPIO_2` et
+`GPIO_3`. Les broches MCU correspondantes — 62, 54, 53 et 55 — deviennent les
+pastilles de test `TP_PIN62`, `TP_PIN54`, `TP_PIN53` et `TP_PIN55`.
+`CMP_OUT1` et `CLB_OUT1` perdent leur indice et deviennent `CMP_OUT` et
+`CLB_OUT`.
+
+**Les deux rangées étant identiques, prévoir une clé mécanique** : position
+obturée aux extrémités, ou ergot sur le support. L'asymétrie 24/32 assurait le
+détrompage toute seule, ce n'est plus le cas — une carte retournée branche le
++5 V sur une entrée analogique.
 
 ---
 
-## 1. Rangée A — analogique, 1 × 24
+## 1. Rangée A — analogique, 1 × 28
 
 | Pos | Signal | Broche | Canaux ADC | Pos | Signal | Broche | Canaux ADC |
 |---|---|---|---|---|---|---|---|
-| A1 | GND | 21 (VSSA) | — | A13 | GND | — | — |
-| A2 | Vin | 6 | A6 | A14 | ADC_10 | 19 | A7, C3 |
-| A3 | Vout | 7 | B2, C6 | A15 | ADC_11 | 20 | A8, B0, C11 |
-| A4 | V1 | 8 | A3, B3, C5 | A16 | ADC_12 | 23 | A4, B8, C14 |
-| A5 | GND | — | — | A17 | GND | — | — |
-| A6 | Temp1 | 10 | A15, B9, C7 | A18 | **I_SHUNT1_MES** | 13 | A5, B12, C2 |
-| A7 | Temp2 | 11 | A14, B14, C4 | A19 | **I_SHUNT1_CMP** | **9** | A2, B6, C9 |
-| A8 | Iin | 12 | A11, B10, C0 | A20 | GND | — | — |
-| A9 | GND | — | — | A21 | **I_SHUNT2_MES** | 24 | A9, B4, C8 |
-| A10 | Iout | 14 | A1, B7 | A22 | **I_SHUNT2_CMP** | **25** | A10, B1, C10 |
-| A11 | ADC_8 | 15 | A0, B15, C15 | A23 | **VREF_ADC** | 16 | VREFHI |
-| A12 | ADC_9 | 18 | A12, C1 | A24 | **VREFLO_SENSE** | 17 | VREFLO |
+| A1 | GND | 21 (VSSA) | — | A15 | ADC_10 | 19 | A7, C3 |
+| A2 | Vin | 6 | A6 | A16 | GND | — | — |
+| A3 | Vout | 7 | B2, C6 | A17 | ADC_11 | 20 | A8, B0, C11 |
+| A4 | GND | — | — | A18 | ADC_12 | 23 | A4, B8, C14 |
+| A5 | V1 | 8 | A3, B3, C5 | A19 | GND | — | — |
+| A6 | Temp1 | 10 | A15, B9, C7 | A20 | **I_SHUNT1_MES** | 13 | A5, B12, C2 |
+| A7 | GND | — | — | A21 | GND | — | — |
+| A8 | Temp2 | 11 | A14, B14, C4 | A22 | **I_SHUNT1_CMP** | **9** | A2, B6, C9 |
+| A9 | Iin | 12 | A11, B10, C0 | A23 | GND | — | — |
+| A10 | GND | — | — | A24 | **I_SHUNT2_MES** | 24 | A9, B4, C8 |
+| A11 | Iout | 14 | A1, B7 | A25 | GND | — | — |
+| A12 | ADC_8 | 15 | A0, B15, C15 | A26 | **I_SHUNT2_CMP** | **25** | A10, B1, C10 |
+| A13 | GND | — | — | A27 | **VREF_ADC** | 16 | VREFHI |
+| A14 | ADC_9 | 18 | A12, C1 | A28 | **VREFLO_SENSE** | 17 | VREFLO |
 
-18 signaux, 6 masses. Les 16 voies ADC du boîtier sortent toutes.
+18 signaux, 10 masses. Les 16 voies ADC du boîtier sortent toutes.
+
+**Masse renforcée autour des shunts.** A19 à A26 alternent strictement masse et
+signal : chaque voie shunt est encadrée des deux côtés. Les quatre positions de
+masse gagnées sur la rangée B servent d'abord à ça.
 
 **Voies shunt dédoublées.** La sortie de chaque AMC0300R est reprise deux fois
 sur le shield : un chemin filtré vers la voie de mesure, un chemin direct vers la
@@ -40,37 +65,38 @@ la Trip Zone, et un défaut sur le filtre ne désarme pas la protection.
 | I_SHUNT2_CMP | 25 | **CMP2_HP3** | CMPSS-2, chemin direct |
 | I_SHUNT2_MES | 24 | — | mesure ADC, filtrée |
 
-**VREF_ADC et VREFLO_SENSE forment une paire adjacente.** La conversion est
-ramenée à (VIN − VREFLO) / (VREFHI − VREFLO) : toute chute ohmique entre la
-référence des AMC0300R et VREFLO devient un décalage sur les 16 voies. Le shield
-bufferise VREF_ADC par un suiveur rail-to-rail et renvoie la paire sur la nappe.
+**VREF_ADC et VREFLO_SENSE forment une paire adjacente**, en A27 et A28. La
+conversion est ramenée à (VIN − VREFLO) / (VREFHI − VREFLO) : toute chute
+ohmique entre la référence des AMC0300R et VREFLO devient un décalage sur les
+16 voies. Le shield bufferise VREF_ADC par un suiveur rail-to-rail et renvoie la
+paire sur la nappe. Ne pas insérer de masse entre les deux.
 
-Voies libres : A11, A12, A14, A15, A16 — cinq de marge sur les neuf demandées.
+Voies libres : A12, A14, A15, A17, A18 — cinq de marge sur les neuf demandées.
 
 ---
 
-## 2. Rangée B — numérique, 1 × 32
+## 2. Rangée B — numérique, 1 × 28
+
+| A14 | ADC_9 | 18 | A12, C1 | A28 | **VREFLO_SENSE** | 17 | VREFLO |
 
 | Pos | Signal | GPIO | Broche | Mux | Pos | Signal | GPIO | Broche | Mux |
 |---|---|---|---|---|---|---|---|---|---|
-| B1 | GND | — | 5/26/45/58 | — | B17 | I2C_SCL | GPIO8 | 47 | 9 |
-| B2 | **+5V** | — | nappe | — | B18 | I2C_SDA | GPIO10 | 63 | 9 |
-| B3 | **nRESET** | — | 3 (XRSn) | — | B19 | SPI_CLK | GPIO18 | 41 | 1 |
-| B4 | **BOOT_SEL** | GPIO24 | 35 | 0 | B20 | SPI_SIMO | GPIO16 | 33 | 1 |
-| B5 | PWM1_A | GPIO0 | 52 | 1 | B21 | SPI_SOMI | GPIO17 | 34 | 1 |
-| B6 | PWM1_B | GPIO1 | 51 | 1 | B22 | SPI_STE | GPIO19 | 42 | 1 |
-| B7 | PWM2_A | GPIO2 | 50 | 1 | B23 | GND | — | — | — |
-| B8 | PWM2_B | GPIO3 | 49 | 1 | B24 | CAN_TX | GPIO13 | 29 | 3 |
-| B9 | GND | — | — | — | B25 | CAN_RX | GPIO12 | 30 | 3 |
-| B10 | PWM3_A | GPIO4 | 48 | 1 | B26 | CMP_OUT1 | GPIO11 | 31 | 3 |
-| B11 | PWM3_B | GPIO5 | 61 | 1 | B27 | CMP_OUT2 | GPIO9 | 62 | 3 |
-| B12 | PWM4_A | GPIO6 | 64 | 1 | B28 | CLB_OUT1 | GPIO22 | 56 | 10 |
-| B13 | PWM4_B | GPIO7 | 57 | 1 | B29 | CLB_OUT2 | GPIO23 | 54 | 10 |
-| B14 | GND | — | — | — | B30 | GPIO_1 | GPIO33 | 32 | 0 |
-| B15 | UART_TX | GPIO29 | 1 | 1 | B31 | GPIO_2 | GPIO40 | 53 | 0 |
-| B16 | UART_RX | GPIO28 | 2 | 1 | B32 | GPIO_3 | GPIO41 | 55 | 0 |
+| B1 | GND | — | 5/26/45/58 | — | B15 | UART_TX | GPIO29 | 1 | 1 |
+| B2 | **+5V** | — | nappe | — | B16 | UART_RX | GPIO28 | 2 | 1 |
+| B3 | **nRESET** | — | 3 (XRSn) | — | B17 | I2C_SCL | GPIO8 | 47 | 9 |
+| B4 | **BOOT_SEL** | GPIO24 | 35 | 0 | B18 | I2C_SDA | GPIO10 | 63 | 9 |
+| B5 | PWM1_A | GPIO0 | 52 | 1 | B19 | SPI_CLK | GPIO18 | 41 | 1 |
+| B6 | PWM1_B | GPIO1 | 51 | 1 | B20 | SPI_SIMO | GPIO16 | 33 | 1 |
+| B7 | PWM2_A | GPIO2 | 50 | 1 | B21 | SPI_SOMI | GPIO17 | 34 | 1 |
+| B8 | PWM2_B | GPIO3 | 49 | 1 | B22 | SPI_STE | GPIO19 | 42 | 1 |
+| B9 | GND | — | — | — | B23 | GND | — | — | — |
+| B10 | PWM3_A | GPIO4 | 48 | 1 | B24 | CAN_TX | GPIO13 | 29 | 3 |
+| B11 | PWM3_B | GPIO5 | 61 | 1 | B25 | CAN_RX | GPIO12 | 30 | 3 |
+| B12 | PWM4_A | GPIO6 | 64 | 1 | B26 | CMP_OUT | GPIO11 | 31 | 3 |
+| B13 | PWM4_B | GPIO7 | 57 | 1 | B27 | CLB_OUT | GPIO22 | 56 | 10 |
+| B14 | GND | — | — | — | B28 | GPIO_1 | GPIO33 | 32 | 0 |
 
-28 signaux, 4 masses. Toutes les positions de mux sont identiques sur les deux
+24 signaux, 4 masses. Toutes les positions de mux sont identiques sur les deux
 MCU, vérifiées dans les deux tableaux *Pin Attributes*.
 
 **B3 et B4 forment le chemin de récupération.** L'ESP32 met BOOT_SEL à 0, impulse
@@ -112,7 +138,7 @@ paire de référence, pas deux signaux indépendants. Le shield bufferise VREF_A
 par un suiveur rail-to-rail avant de l'envoyer.
 
 Les cinq réserves correspondent exactement aux cinq voies ADC libres du
-connecteur devkit — A11, A12, A14, A15, A16. Une voie ajoutée plus tard se câble
+connecteur devkit — A12, A14, A15, A17, A18. Une voie ajoutée plus tard se câble
 de bout en bout sans retoucher aucune carte.
 
 ### PWM — commandes rapides
@@ -132,7 +158,7 @@ paires complémentaires HRPWM avec temps mort matériel.
 | 1 GND | 2 **Stage1_EN** | 3 GND | 4 **Stage2_EN** | 5 GND | 6 **HV_EN** | 7 GND | 8 **Discharge** |
 | 9 GND | 10 **CMP_OUT** | 11 GND | 12 **nFAULT** | 13 GND | 14 **I2C_SCL** | 15 GND | 16 **I2C_SDA** |
 
-`nFAULT` remonte un défaut de la carte de puissance vers GPIO_1 (B30).
+`nFAULT` remonte un défaut de la carte de puissance vers GPIO_1 (B28).
 `CMP_OUT` sort le drapeau de défaut agrégé du C2000. L'I2C reste disponible pour
 un capteur de température ou une EEPROM de calibration sur la carte de puissance.
 
