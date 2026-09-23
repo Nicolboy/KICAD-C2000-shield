@@ -26,11 +26,41 @@ PITCH = 2.54
 PER_SIDE = 16
 PIN_LEN = 5.08
 
-# 16 broches au pas de 2,54 occupent 38,1 mm ; le corps leur laisse une marge
-# d'un pas de chaque cote.
+FONT = 1.27          # hauteur de police des noms de broche
+CHAR_W = 0.8 * FONT  # avance par caractere de la police batonnet KiCad
+NAME_OFF = 0.508     # (pin_names (offset ...)) : retrait du texte vers le corps
+MARGE = 1.27         # jeu visuel entre deux textes qui se font face
+
+# 16 broches au pas de 2,54 occupent 38,1 mm, centrees sur l'origine.
 SPAN = (PER_SIDE - 1) * PITCH / 2.0        # 19.05
-BODY = SPAN + PITCH                         # 21.59
-PIN_OFF = BODY + PIN_LEN                    # 26.67
+
+# Le corps est agrandi dans main() d'apres la longueur reelle des noms.
+BODY = SPAN + PITCH
+PIN_OFF = BODY + PIN_LEN
+
+
+def dimensionner(names):
+    """Fixe BODY pour que les noms des quatre cotes ne se croisent jamais.
+
+    Les noms des broches gauche/droite s'ecrivent horizontalement vers
+    l'interieur, sur les lignes y de -SPAN a +SPAN. Ceux du haut/bas
+    s'ecrivent verticalement vers l'interieur, sur les colonnes x de -SPAN a
+    +SPAN. Les deux familles se recouvrent des que le texte depasse SPAN.
+
+    Il suffit donc que le corps laisse, entre son bord et la bande occupee par
+    les broches de la face perpendiculaire, la place d'un nom entier :
+
+        BODY >= SPAN + longueur_du_plus_long_nom + marge
+
+    Arrondi au multiple de 1,27 superieur, pour rester sur la grille.
+    """
+    global BODY, PIN_OFF
+    longest = max((len(n) for n in names), default=0)
+    besoin = SPAN + NAME_OFF + longest * CHAR_W + MARGE
+    demi = 1.27
+    BODY = max(SPAN + PITCH, -(-besoin // demi) * demi)
+    PIN_OFF = BODY + PIN_LEN
+    return longest
 
 PIN_RE = re.compile(
     r'\(pin\s+(\S+)\s+(\S+)\s+\(at\s+\S+\s+\S+\s+\d+\)\s+\(length\s+\S+\)'
@@ -141,6 +171,7 @@ def main():
 
     text = SRC.read_text(encoding="utf-8")
     syms = blocks(text)
+    longest = dimensionner(p[2] for b in syms.values() for p in PIN_RE.findall(b))
     body = "\n".join(rebuild(n, b) for n, b in sorted(syms.items()))
 
     out = Path(args.out)
@@ -153,6 +184,10 @@ def main():
         encoding="utf-8",
     )
     print("Ecrit : %s (%d symboles)" % (path, len(syms)))
+    print(
+        "  corps %s x %s mm (nom le plus long : %d caracteres)"
+        % (_num(2 * BODY), _num(2 * BODY), longest)
+    )
     for n in sorted(syms):
         print("  %s : 64 broches, 16 par cote" % n)
 
