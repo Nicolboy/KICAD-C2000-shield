@@ -1,0 +1,181 @@
+# Décisions de conception
+
+Ce document rassemble les choix qui ont l'air d'inefficacités et n'en sont pas.
+Chacun a coûté quelque chose — une broche, une piste, un composant — en échange
+d'une propriété qu'on ne voulait pas perdre.
+
+Il existe parce que ces choix sont exactement ceux qu'on « optimise » six mois
+plus tard, faute de se rappeler ce qu'ils protégeaient. Chaque entrée dit donc
+trois choses : la décision, sa raison, et ce qui casse si on la défait.
+
+Ce fichier fait autorité sur les décisions. Le brochage, lui, est décrit dans
+[`brochage-devkit.md`](brochage-devkit.md).
+
+---
+
+## 1. Le connecteur est identique sur les deux MCU, et ça se paie
+
+**Décision.** Les deux devkits, F280037 et F28P551, exposent le même connecteur
+— 56 positions sur 56. Pour y parvenir, les LED sont posées sur les
+entrées/sorties **non communes** aux deux boîtiers.
+
+**Pourquoi.** Poser une LED est le besoin le plus trivial de la carte ; c'est
+donc lui qu'on sacrifie. En le reléguant sur les broches qui divergent, on
+libère toutes les broches communes pour ce qui traverse le connecteur. Le shield
+devient indifférent au MCU monté dessus.
+
+**Ce qui casse.** Déplacer une LED sur une broche commune la retire du domaine
+partagé et rompt l'interchangeabilité. Il faudrait alors deux shields.
+
+Les quatre divergences, toutes locales à la carte devkit :
+
+| Broche | F280037 | F28P551 |
+|---|---|---|
+| 27 | VDD 1,2 V, découplage | LED bleue (GPIO20) |
+| 28 | VDDIO 3,3 V | LED rouge (GPIO21) |
+| 40 | LED rouge (GPIO32) | pastille de test |
+| 46 | LED bleue (GPIO39) | VREGENZ à VSS |
+
+La cause profonde est le régulateur 1,2 V : le F28P551 a le sien en interne,
+activé par VREGENZ à VSS ; le F280037 en 64 PM non-Q n'a pas cette broche et
+demande un LDO supplémentaire. **Toute divergence hors de cette liste est une
+erreur.**
+
+---
+
+## 2. PWM3 et PWM4 restent en réserve, et restent des PWM
+
+**Décision.** Les positions B10 à B13 portent `PWM3_A/B` et `PWM4_A/B`, câblées
+de bout en bout sur la nappe PWM alors que rien ne s'en sert encore.
+
+**Pourquoi.** Ce sont les deux seules paires complémentaires HRPWM avec temps
+mort matériel encore disponibles. La nappe PWM est aussi la seule à alternance
+signal/masse pensée pour des fronts rapides — un PWM posé ailleurs n'aurait pas
+le même environnement.
+
+**Ce qui casse.** Les réaffecter à une commande lente sous prétexte qu'elles
+sont libres consomme une ressource rare pour un besoin que n'importe quel GPIO
+satisfait. Les commandes lentes du shield — `Stage1_EN`, `Stage2_EN`, `HV_EN`,
+`Discharge` — ont leur propre nappe GPIO, faite pour elles.
+
+---
+
+## 3. Alternance signal / masse stricte 1:1 sur les quatre nappes
+
+**Décision.** Un conducteur sur deux est une masse, sur les quatre nappes. Aucune
+ligne d'alimentation ne circule dedans.
+
+**Pourquoi.** C'est de la mesure de courant. Le retour de chaque signal longe le
+signal lui-même, la boucle reste petite, la diaphonie s'effondre.
+
+**Ce qui casse.** Récupérer une masse pour y passer un signal de plus donne un
+conducteur gratuit et une mesure qui dérive sans qu'on sache pourquoi.
+
+**Exception, voulue.** `VREF_ADC` et `VREFLO_SENSE` sont **adjacents** — A23/A24
+au connecteur, positions 6 et 7 de la nappe ADC-2. C'est une paire de référence,
+pas deux signaux indépendants : la conversion est ramenée à
+(VIN − VREFLO) / (VREFHI − VREFLO). Les séparer par une masse rendrait la mesure
+différentielle fausse au lieu de la protéger.
+
+C'est aussi la raison pour laquelle le **+5 V a son propre connecteur**. Les
+500 mA de la commande n'ont pas à partager leur retour avec les masses de
+référence des voies ADC : c'était précisément le mécanisme d'erreur à éviter.
+
+---
+
+## 4. Chaque shunt sort deux fois : `_MES` filtré, `_CMP` direct
+
+**Décision.** La sortie de chaque AMC0300R est reprise deux fois sur le shield.
+Un chemin filtré vers la voie de mesure, un chemin direct vers le comparateur.
+
+**Pourquoi.** Le chemin `_CMP` attaque le CMPSS sans filtre anti-repliement : la
+Trip Zone se déclenche sans le retard qu'introduirait le filtre. Et les deux
+chemins étant indépendants, un défaut sur le filtre ne désarme pas la
+protection.
+
+**Ce qui casse.** Fusionner les deux chemins, ou insérer un filtre sur `_CMP`,
+remet le retard dans la boucle de protection et recrée le point de défaillance
+unique. Contrainte à respecter : Rs ≤ 50 Ω sur le chemin comparateur.
+
+| Voie | Broche | CMPSS | Rôle |
+|---|---|---|---|
+| `I_SHUNT1_CMP` | 9 | CMP1_HP0 | seuil DAC interne → Trip Zone, sans filtre |
+| `I_SHUNT1_MES` | 13 | — | mesure ADC, filtrée |
+| `I_SHUNT2_CMP` | 25 | CMP2_HP3 | chemin direct |
+| `I_SHUNT2_MES` | 24 | — | mesure ADC, filtrée |
+
+---
+
+## 5. Les 16 voies ADC sortent toutes, pour 9 nécessaires
+
+**Décision.** Toutes les voies ADC du boîtier sont exportées. Les cinq libres —
+A11, A12, A14, A15, A16 — sont câblées jusqu'aux cinq réserves de la nappe
+ADC-2, dans le même ordre.
+
+**Pourquoi.** Une voie de mesure ajoutée plus tard se raccorde de bout en bout
+sans retoucher une seule carte. La marge est volontaire et son coût est nul :
+ces broches ne servaient à rien d'autre.
+
+**Ce qui casse.** « Récupérer » ces positions pour autre chose économise cinq
+pistes et transforme le moindre ajout de mesure en nouvelle révision des trois
+cartes.
+
+---
+
+## 6. nRESET en drain ouvert uniquement
+
+**Décision.** La ligne `nRESET` (B3) n'est jamais attaquée en push-pull depuis
+le shield.
+
+**Pourquoi.** Le MCU tire lui-même cette ligne à zéro sur watchdog et sur
+brownout. C'est une ligne à plusieurs maîtres.
+
+**Ce qui casse.** Une sortie push-pull côté shield met en conflit deux étages
+lorsque le MCU se réinitialise — courant de court-circuit, et un reset qui
+n'aboutit pas.
+
+---
+
+## 7. Point de jonction VSS/VSSA unique
+
+**Décision.** Les masses numérique et analogique se rejoignent en **un seul
+point**, près du boîtier, et une seule masse remonte au connecteur.
+
+**Pourquoi.** Deux jonctions créent une boucle, et la boucle capte.
+
+---
+
+## 8. `GND` et `+5V` en `power_in`, avec un `PWR_FLAG` par net
+
+**Décision.** Les broches d'alimentation du connecteur gardent le type
+électrique `power_in`, et chaque net porte un `PWR_FLAG`.
+
+**Pourquoi.** Le connecteur alimente bien la carte, mais c'est le brochage qui
+fait autorité et il les décrit en entrée. Un net composé uniquement de
+`power_in` fait lever `power_pin_not_driven` à l'ERC, même avec un symbole de
+masse dessus : le `PWR_FLAG` répond à ça sans toucher au type électrique.
+
+**Ce qui casse.** Passer les broches en `power_out` fait taire l'ERC en mentant
+sur la nature du connecteur. C'est la documentation qu'on dégrade pour obtenir
+un rapport propre.
+
+---
+
+## Points ouverts — ne pas combler par une estimation
+
+Ces valeurs manquent. Elles demandent une lecture de datasheet ou une mesure,
+pas une approximation plausible.
+
+- Broches de mode de démarrage des deux MCU : à lire dans le manuel technique.
+- `VREFHI` en mode externe : plage, impédance de source, courant. Et le choix
+  2,5 V ou 3,0 V, selon la pleine échelle des AMC.
+- Courant de sortie GPIO : le mode 20 mA du F28P551 n'est pas confirmé dans
+  SPRSPC5. Considérer 4 mA — les DPC817 à 5 mA imposeraient alors un buffer
+  côté shield.
+- État au reset de GPIO39 (LED, PCB F280037).
+- Caractéristiques de sortie des AMC0311S et AMC0300R : impédance, pleine
+  échelle, bande passante — pour dimensionner les filtres sous Rs ≤ 50 Ω.
+- Courant d'entrée du REFIN des AMC0300R, pour le suiveur.
+- Nombre de banques Flash des deux MCU, pour le FOTA.
+- Débit SCI maximal accepté par l'autobaud du bootloader : il fixe la durée
+  d'indisponibilité pendant une mise à jour.

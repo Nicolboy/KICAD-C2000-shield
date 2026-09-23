@@ -123,17 +123,17 @@ Travail en cours, et le dire plutôt que de le masquer :
 - **Carte de puissance** — spécifiée dans `doc/`, pas encore dessinée.
 
 Les points laissés ouverts — caractéristiques de sortie des AMC, courant
-d'entrée du REFIN, choix de VREFHI — sont listés dans
-[`CLAUDE.md`](CLAUDE.md) et dans `doc/brochage-devkit.md` §6. Ils attendent une
-lecture de datasheet, pas une estimation.
+d'entrée du REFIN, choix de VREFHI — sont listés en fin de
+[`doc/decisions.md`](doc/decisions.md). Ils attendent une lecture de datasheet,
+pas une estimation.
 
 ---
 
 ## Décisions à ne pas défaire
 
-Certains choix ressemblent à des inefficacités sans en être. Ils sont
-documentés dans [`CLAUDE.md`](CLAUDE.md) avec leur justification — entre
-autres :
+Certains choix ressemblent à des inefficacités sans en être. Les huit sont
+documentés dans [`doc/decisions.md`](doc/decisions.md), chacun avec sa raison et
+ce qui casse si on le défait — entre autres :
 
 - Les **PWM3 et PWM4 restent en réserve et restent des PWM** : ce sont les deux
   seules paires complémentaires HRPWM avec temps mort matériel disponibles.
