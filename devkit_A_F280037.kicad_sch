@@ -2,6 +2,425 @@
   (uuid "cc085941-203a-19c6-3985-50f005d3074a")
   (paper "A2")
   (lib_symbols
+	(symbol "Connector:TC2050"
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board yes)
+		(in_pos_files yes)
+		(duplicate_pin_numbers_are_jumpers no)
+		(property "Reference" "J"
+			(at 1.27 11.43 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "TC2050"
+			(at 1.27 -11.43 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Connector:Tag-Connect_TC2050-IDC-NL_2x05_P1.27mm_Vertical"
+			(at 1.27 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "https://www.tag-connect.com/wp-content/uploads/bsk-pdf-manager/TC2050-IDC-NL_Datasheet_8.pdf"
+			(at 1.27 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Tag-Connect’s 10-pins connector"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_keywords" "Debug plug-of-nails"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "ki_fp_filters" "*TC2050*"
+			(at 0 0 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(symbol "TC2050_1_1"
+			(rectangle
+				(start -2.54 10.16)
+				(end 5.08 -10.16)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type background)
+				)
+			)
+			(circle
+				(center -0.762 -8.382)
+				(radius 1.016)
+				(stroke
+					(width 0)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(circle
+				(center 0 5.08)
+				(radius 0.635)
+				(stroke
+					(width 0)
+					(type default)
+				)
+				(fill
+					(type outline)
+				)
+			)
+			(circle
+				(center 0 2.54)
+				(radius 0.635)
+				(stroke
+					(width 0)
+					(type default)
+				)
+				(fill
+					(type outline)
+				)
+			)
+			(circle
+				(center 0 0)
+				(radius 0.635)
+				(stroke
+					(width 0)
+					(type default)
+				)
+				(fill
+					(type outline)
+				)
+			)
+			(circle
+				(center 0 -2.54)
+				(radius 0.635)
+				(stroke
+					(width 0)
+					(type default)
+				)
+				(fill
+					(type outline)
+				)
+			)
+			(circle
+				(center 0 -5.08)
+				(radius 0.635)
+				(stroke
+					(width 0)
+					(type default)
+				)
+				(fill
+					(type outline)
+				)
+			)
+			(circle
+				(center 1.27 8.382)
+				(radius 1.016)
+				(stroke
+					(width 0)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(circle
+				(center 2.54 5.08)
+				(radius 0.635)
+				(stroke
+					(width 0)
+					(type default)
+				)
+				(fill
+					(type outline)
+				)
+			)
+			(circle
+				(center 2.54 2.54)
+				(radius 0.635)
+				(stroke
+					(width 0)
+					(type default)
+				)
+				(fill
+					(type outline)
+				)
+			)
+			(circle
+				(center 2.54 0)
+				(radius 0.635)
+				(stroke
+					(width 0)
+					(type default)
+				)
+				(fill
+					(type outline)
+				)
+			)
+			(circle
+				(center 2.54 -2.54)
+				(radius 0.635)
+				(stroke
+					(width 0)
+					(type default)
+				)
+				(fill
+					(type outline)
+				)
+			)
+			(circle
+				(center 2.54 -5.08)
+				(radius 0.635)
+				(stroke
+					(width 0)
+					(type default)
+				)
+				(fill
+					(type outline)
+				)
+			)
+			(circle
+				(center 3.302 -8.382)
+				(radius 1.016)
+				(stroke
+					(width 0)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+			(pin passive line
+				(at -5.08 5.08 0)
+				(length 2.54)
+				(name ""
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "1"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin passive line
+				(at -5.08 2.54 0)
+				(length 2.54)
+				(name ""
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "2"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin passive line
+				(at -5.08 0 0)
+				(length 2.54)
+				(name ""
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "3"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin passive line
+				(at -5.08 -2.54 0)
+				(length 2.54)
+				(name ""
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "4"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin passive line
+				(at -5.08 -5.08 0)
+				(length 2.54)
+				(name ""
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "5"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin passive line
+				(at 7.62 -5.08 180)
+				(length 2.54)
+				(name ""
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "6"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin passive line
+				(at 7.62 -2.54 180)
+				(length 2.54)
+				(name ""
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "7"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin passive line
+				(at 7.62 0 180)
+				(length 2.54)
+				(name ""
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "8"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin passive line
+				(at 7.62 2.54 180)
+				(length 2.54)
+				(name ""
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "9"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+			(pin passive line
+				(at 7.62 5.08 180)
+				(length 2.54)
+				(name ""
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "10"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+		)
+		(embedded_fonts no)
+	)
   	(symbol "Regulator_Linear:MCP1700x-330xxTT"
   		(pin_names
   			(offset 0.254)
@@ -1623,24 +2042,7 @@
     (pin "28" (uuid "1ee5d07b-6d3f-a7b3-4402-408bad22a19c"))
     (instances (project "devkit_A_F280037" (path "/b862ab70-d3e9-7521-c4b2-1a1fcce3c7bb" (reference "J2") (unit 1))))
   )
-  (symbol (lib_id "C2000_Devkit_Connectors:JTAG_CTBP_10") (at 59.69 199.39 0) (unit 1)
-    (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
-    (uuid "d665abb8-de21-12d1-6e0e-9aa7a1afcf2f")
-    (property "Reference" "J3" (at 59.69 154.39 0) (effects (font (size 1.27 1.27))))
-    (property "Value" "JTAG_CTBP_10" (at 59.69 157.39 0) (effects (font (size 1.27 1.27))))
-    (property "Footprint" "Connector_PinHeader_1.27mm:PinHeader_2x05_P1.27mm_Vertical" (at 0 0 0) (effects (font (size 1.27 1.27)) (hide yes)))
-    (pin "1" (uuid "a89137fe-50a0-c490-f397-543132c786e1"))
-    (pin "2" (uuid "0228a701-2052-0c3b-fd9e-97bd8db05352"))
-    (pin "3" (uuid "56eb28f4-68d6-fe70-ee32-ffc59a0620f1"))
-    (pin "4" (uuid "e6225fc9-a8eb-444e-3b03-d48f6cfcb039"))
-    (pin "5" (uuid "98375088-0046-cd03-6e1b-aea3e0a37269"))
-    (pin "6" (uuid "4d13d487-5717-ad44-2434-5100a358913f"))
-    (pin "7" (uuid "8b6a4a10-e162-ce3a-559f-46c4d6c627d8"))
-    (pin "8" (uuid "de4c3361-4341-e74b-ec8a-a5003b8abfad"))
-    (pin "9" (uuid "2b8ab443-75e5-8ce1-3172-7864fa7625dd"))
-    (pin "10" (uuid "47e82601-0a44-d013-7b30-3b62a1fbfeb8"))
-    (instances (project "devkit_A_F280037" (path "/b862ab70-d3e9-7521-c4b2-1a1fcce3c7bb" (reference "J3") (unit 1))))
-  )
+  
   (global_label "Vin" (shape bidirectional) (at 81.28 95.25 180)
     (effects (font (size 1.27 1.27)) (justify right))
     (uuid "f24182f3-3f7d-c730-7534-618a58e08dfe")
@@ -2073,34 +2475,13 @@
     (effects (font (size 1.27 1.27)) (justify right))
     (uuid "c050d876-996a-65fc-be5b-429eb1547614")
   )
-  (global_label "VDDIO" (shape bidirectional) (at 36.83 186.69 180)
-    (effects (font (size 1.27 1.27)) (justify right))
-    (uuid "db739d69-b8cb-a742-ddc8-2a11c1815538")
-  )
-  (global_label "JTAG_TMS" (shape bidirectional) (at 36.83 189.23 180)
-    (effects (font (size 1.27 1.27)) (justify right))
-    (uuid "13ec7156-07bd-2beb-2093-ac20668dc37c")
-  )
-  (global_label "JTAG_TCK" (shape bidirectional) (at 36.83 194.31 180)
-    (effects (font (size 1.27 1.27)) (justify right))
-    (uuid "24ef9e13-44e5-b1df-410d-ea1b5d88f95d")
-  )
-  (global_label "JTAG_TDO" (shape bidirectional) (at 36.83 199.39 180)
-    (effects (font (size 1.27 1.27)) (justify right))
-    (uuid "8b5e12d4-428d-5222-2975-7db454d511a3")
-  )
-  (global_label "JTAG_TDI" (shape bidirectional) (at 36.83 204.47 180)
-    (effects (font (size 1.27 1.27)) (justify right))
-    (uuid "827c31c2-0a37-9d9a-6a74-0e85c6685fb9")
-  )
-  (global_label "GND" (shape bidirectional) (at 36.83 207.01 180)
-    (effects (font (size 1.27 1.27)) (justify right))
-    (uuid "d93339ca-2fe1-5a28-228b-4bef5116f509")
-  )
-  (global_label "~{nRESET}" (shape bidirectional) (at 36.83 209.55 180)
-    (effects (font (size 1.27 1.27)) (justify right))
-    (uuid "9d960e67-4b6b-0d0d-f72e-4947de10244a")
-  )
+  
+  
+  
+  
+  
+  
+  
   (sheet_instances (path "/" (page "1")))
 	(symbol (lib_id "Regulator_Linear:MCP1700x-330xxTT") (at 38.10 241.30 0) (unit 1)
 		(exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
@@ -2622,5 +3003,55 @@
 	(global_label "GND" (shape bidirectional) (at 190.50 295.91 270)
 		(effects (font (size 1.27 1.27)) (justify right))
 		(uuid "7653f6ea-c23d-4ebc-9eb3-0a2d17e3e1bb")
+	)
+	(symbol (lib_id "Connector:TC2050") (at 62.23 199.39 0) (unit 1)
+		(exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+		(uuid "5e0043ed-5cc0-4923-bcec-bd8de125eb21")
+		(property "Reference" "J3" (at 64.77 196.85 0) (effects (font (size 1.27 1.27))))
+		(property "Value" "TC2050" (at 64.77 199.39 0) (effects (font (size 1.27 1.27))))
+		(property "Footprint" "Connector:Tag-Connect_TC2050-IDC-NL_2x05_P1.27mm_Vertical" (at 62.23 199.39 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(pin "1" (uuid "cbe7f300-d914-41cf-9058-4e3bef97d45a"))
+		(pin "2" (uuid "865c68bb-6351-496c-a0b3-55329247c780"))
+		(pin "3" (uuid "82828493-4496-4c5e-a066-16d64a1a1755"))
+		(pin "4" (uuid "46cf7968-773c-4fd2-a47b-4e4b363cf609"))
+		(pin "5" (uuid "fa3f40ca-7265-4e4a-8f94-927b0fc2e86f"))
+		(pin "6" (uuid "c8f8edde-9048-42d0-a74b-6c0c2357f899"))
+		(pin "7" (uuid "34dd928e-228f-4409-b266-4e371d67fbaf"))
+		(pin "8" (uuid "d5a1c0ff-ceb4-4ce5-babd-a9c8f6de1f39"))
+		(pin "9" (uuid "4142e9af-0550-4031-8452-1f7571453310"))
+		(pin "10" (uuid "47a3d11c-b523-487d-a93f-e38248c1dc31"))
+		(instances
+			(project "devkit_A_F280037"
+				(path "/cc085941-203a-19c6-3985-50f005d3074a" (reference "J3") (unit 1))
+			)
+		)
+	)
+	(global_label "GND" (shape bidirectional) (at 57.15 194.31 180)
+		(effects (font (size 1.27 1.27)) (justify right))
+		(uuid "18b70d2d-5960-435e-8e1c-26bf99560ed2")
+	)
+	(global_label "JTAG_TCK" (shape bidirectional) (at 57.15 196.85 180)
+		(effects (font (size 1.27 1.27)) (justify right))
+		(uuid "ba3bb4a4-f680-4233-8374-1c61c8925f11")
+	)
+	(global_label "JTAG_TDO" (shape bidirectional) (at 57.15 199.39 180)
+		(effects (font (size 1.27 1.27)) (justify right))
+		(uuid "a91ab18b-de58-43ef-89ef-5a5e089edba5")
+	)
+	(global_label "JTAG_TMS" (shape bidirectional) (at 57.15 201.93 180)
+		(effects (font (size 1.27 1.27)) (justify right))
+		(uuid "aa16ce2c-2025-4d38-946b-4866d40dce76")
+	)
+	(global_label "JTAG_TDI" (shape bidirectional) (at 57.15 204.47 180)
+		(effects (font (size 1.27 1.27)) (justify right))
+		(uuid "d8a3ebaf-d376-47e2-a381-cec2bb9207d6")
+	)
+	(global_label "~{nRESET}" (shape bidirectional) (at 69.85 201.93 0)
+		(effects (font (size 1.27 1.27)) (justify left))
+		(uuid "3fcbdcc1-1368-4fc3-9138-23871d2677e6")
+	)
+	(global_label "VDDIO" (shape bidirectional) (at 69.85 194.31 0)
+		(effects (font (size 1.27 1.27)) (justify left))
+		(uuid "14ccb802-dfcf-4212-9b37-6e4583a21c27")
 	)
 )
