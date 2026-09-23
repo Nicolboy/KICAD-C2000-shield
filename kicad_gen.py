@@ -3,7 +3,11 @@
 
 Ne genere rien tout seul : fournit les primitives s-expression (fils,
 symboles d'alimentation, lecture de broches) et les gabarits de .kicad_pcb
-et .kicad_pro partages par gen_shield.py et gen_devkit.py.
+et .kicad_pro partages par gen_devkit.py.
+
+Conserve aussi les primitives de cablage (wire, pwr_symbol) dont plus aucun
+generateur ne se sert depuis que shield.kicad_sch est edite a la main. Elles
+restent la pour un futur generateur, pas par oubli.
 """
 
 import re

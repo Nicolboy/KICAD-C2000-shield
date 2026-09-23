@@ -1,9 +1,13 @@
 #!/usr/bin/env python3
-"""Monte les deux projets KiCad des devkits a partir de imports/.
+"""Monte les deux projets KiCad des devkits a partir de src/.
 
-Les schemas viennent tout faits de imports/ : ce script ne les fabrique pas,
-il les installe a la racine du depot (imports/ est ignore par git) et leur
-ajoute le .kicad_pro et le .kicad_pcb qui manquent pour former un projet.
+Les schemas viennent tout faits de src/ : ce script ne les fabrique pas, il les
+installe a la racine du depot et leur ajoute le .kicad_pro et le .kicad_pcb qui
+manquent pour former un projet.
+
+ATTENTION : les .kicad_sch produits a la racine sont jetables. Toute retouche
+manuelle y est perdue au prochain --force. Ce qui doit survivre se modifie dans
+src/, qui est versionne, ou dans ce script.
 
 Trois retouches sont appliquees a chaque schema installe :
 
@@ -27,7 +31,10 @@ from pathlib import Path
 
 import kicad_gen as pg
 
-IMPORTS = Path("imports")
+# Les schemas source sont versionnes dans src/. imports/ reste la boite de
+# reception : on y depose, on copie dans src/, et c'est src/ qui fait foi.
+# Sans ca la source de verite des deux devkits ne serait pas dans le depot.
+SRC = Path("src")
 LIBDIR = Path("lib")
 
 MCU_NICK = "C2000_MCU"
@@ -44,8 +51,8 @@ LIBS = {
 }
 
 PROJECTS = [
-    ("devkit_A_F280037", IMPORTS / "devkit_c2000_A_F280037.kicad_sch"),
-    ("devkit_B_F28P551", IMPORTS / "devkit_c2000_B_F28P551.kicad_sch"),
+    ("devkit_A_F280037", SRC / "devkit_c2000_A_F280037.kicad_sch"),
+    ("devkit_B_F28P551", SRC / "devkit_c2000_B_F28P551.kicad_sch"),
 ]
 
 # Contour provisoire : chaque rangee fait 28 positions au pas 2,54, soit une

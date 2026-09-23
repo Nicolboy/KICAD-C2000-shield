@@ -43,11 +43,25 @@ Un préfixe par groupe, le rôle dans le nom.
 | Groupe | Fichiers |
 |---|---|
 | Brique commune | `kicad_gen.py` — primitives s-expression, gabarits `.kicad_pcb` / `.kicad_pro`. Ne génère rien seul. |
-| Générateurs | `gen_symbole_mcu.py`, `gen_shield.py`, `gen_devkit.py` |
+| Générateurs | `gen_symbole_mcu.py`, `gen_devkit.py` |
 | Projets KiCad | `shield.*`, `devkit_A_F280037.*`, `devkit_B_F28P551.*` — **trois, pas un de plus** |
+| Sources | `src/` — schémas source des devkits, **versionnés** |
 | Librairies | `lib/` versionné, `build/` généré |
-| Documents | `doc/` — brochages, spécification, README des librairies |
+| Documents | `doc/` — brochages, décisions, spécification, README des librairies |
 | Boîte de réception | `imports/` — **ignoré par git**, rien ne doit en dépendre à l'ouverture |
+
+## Quel schéma éditer — à lire avant d'ouvrir KiCad
+
+| Schéma | Édition |
+|---|---|
+| `shield.kicad_sch` | **à la main**, c'est le fichier de travail |
+| `devkit_A_F280037.kicad_sch` | **jetable**, écrasé par `gen_devkit.py --force` |
+| `devkit_B_F28P551.kicad_sch` | **jetable**, idem |
+
+Une retouche manuelle sur un devkit est perdue à la régénération suivante, sans
+avertissement. Ce qui doit survivre se modifie dans `src/` ou dans le
+générateur. `gen_shield.py` a été retiré pour cette raison : il écrasait
+`shield.kicad_sch`. Détail dans `doc/decisions.md` §9 et §10.
 
 ## Vérification avant tout commit
 

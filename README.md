@@ -59,12 +59,17 @@ symboles KiCad, les schémas et les vérifications en découlent par génératio
 on ne modifie jamais un `.kicad_sym` à la main.
 
 ```
-doc/brochage-devkit.md        source de vérité, relu par un humain
+doc/brochage-devkit.md        source de vérité, relue par un humain
         │
         ├── gen_symbole_mcu.py   → build/C2000_MCU_LQFP64.kicad_sym
-        ├── gen_devkit.py        → devkit_A_F280037.*  devkit_B_F28P551.*
-        └── gen_shield.py        → shield.*
-                                   kicad_gen.py — primitives communes
+        │                          (dimensionne le symbole depuis les noms)
+        │
+        └── gen_devkit.py        → devkit_A_F280037.*  devkit_B_F28P551.*
+              ▲                    kicad_gen.py — primitives communes
+              │
+            src/*.kicad_sch        schémas source des devkits, versionnés
+
+shield.*                       édité à la main dans KiCad — pas généré
 ```
 
 L'intérêt n'est pas le gain de temps, c'est que **les règles de conception
@@ -99,11 +104,15 @@ KiCad 10 et Python 3.12 requis. `kicad-cli` doit être dans le `PATH`.
 ```bash
 python gen_symbole_mcu.py -o build/     # symboles MCU
 python gen_devkit.py --force            # les deux projets devkit
-python gen_shield.py                    # le shield
 
 kicad-cli sch erc --exit-code-violations <projet>.kicad_sch
 kicad-cli pcb drc --exit-code-violations <projet>.kicad_pcb
 ```
+
+`shield.*` n'apparaît pas ici : il est édité à la main et ne se régénère pas.
+Les schémas de devkit produits à la racine sont en revanche **jetables** — toute
+retouche manuelle y est perdue au prochain `--force`. Ce qui doit survivre se
+modifie dans `src/` ou dans le générateur.
 
 Contraintes de fabrication : **2 couches**, pistes 1 mm minimum, vias 2 mm avec
 perçage 0,8 mm — dimensionné pour une fabrication maison.

@@ -161,6 +161,51 @@ un rapport propre.
 
 ---
 
+## 9. Le shield s'édite à la main, les devkits se régénèrent
+
+**Décision.** Les trois schémas n'ont pas le même statut, et il faut le savoir
+avant d'ouvrir KiCad :
+
+| Schéma | Édition |
+|---|---|
+| `devkit_A_F280037.kicad_sch` | **jetable** — reconstruit par `gen_devkit.py` |
+| `devkit_B_F28P551.kicad_sch` | **jetable** — idem |
+| `shield.kicad_sch` | **édité à la main**, c'est le fichier de travail |
+
+**Pourquoi.** Le générateur du shield amenait à la ligne de départ — connecteurs
+posés, alimentations câblées, un `PWR_FLAG` par net — puis s'arrêtait : le
+routage des signaux demande des choix de conception qui n'appartiennent pas à un
+script. Ce travail commence maintenant, et il se fait dans KiCad.
+
+`gen_shield.py` a donc été **retiré du dépôt**. Il écrivait `shield.kicad_sch`
+en entier et l'aurait écrasé au premier `--force`, sans avertissement. Un
+amorçage à usage unique qui traîne dans l'arborescence est un piège, pas un
+outil. Il reste dans l'historique git (commit `31ecd50`) si l'on veut repartir
+d'une feuille blanche.
+
+**Ce qui casse.** Retoucher un schéma de devkit à la main : la modification
+disparaît au prochain `gen_devkit.py --force`. Ce qui doit survivre se modifie
+dans `src/` ou dans le générateur.
+
+---
+
+## 10. Les schémas source des devkits sont versionnés dans `src/`
+
+**Décision.** `src/devkit_c2000_A_F280037.kicad_sch` et son homologue B sont
+suivis par git. `imports/` reste la boîte de réception, ignorée.
+
+**Pourquoi.** `gen_devkit.py` ne fabrique pas ces schémas : il les recopie et
+les retouche — nom de projet, symbole MCU carré, recalage sur la grille de
+1,27 mm. La vraie source, c'était donc un dossier non versionné. Un dépôt dont
+l'argument est que tout se régénère depuis une source ne peut pas laisser cette
+source hors de lui-même.
+
+**Ce qui casse.** Remettre `PROJECTS` sur `imports/` : le jour où ce dossier
+disparaît, les deux devkits ne sont plus régénérables et rien ne le signale
+avant qu'on essaie.
+
+---
+
 ## Points ouverts — ne pas combler par une estimation
 
 Ces valeurs manquent. Elles demandent une lecture de datasheet ou une mesure,
