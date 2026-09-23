@@ -10,6 +10,13 @@
   Ne jamais remettre de `core.sshCommand` dans le dépôt : ça contourne cette
   configuration et fait échouer le push avec « denied to deploy key ».
 
+## Méthode de travail
+
+`doc/methode-kicad-claude.md` — partage des rôles, déroulé d'une séance, pièges
+de format de fichier avec leur signature, et un tableau « en cas de ».
+**À lire avant la première séance KiCad**, ça évite de redécouvrir seul ce qui a
+déjà coûté du temps ici.
+
 ## Règles
 - Committer avant toute modification (git).
 - PCB: passer par kipy sur l'instance ouverte. Ne jamais éditer

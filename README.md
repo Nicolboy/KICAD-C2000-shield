@@ -83,6 +83,25 @@ longueur réelle du nom de broche le plus long, pour que les textes des quatre
 faces ne se croisent jamais — plutôt qu'une taille choisie à l'œil qui casse au
 premier nom un peu long.
 
+Les schémas ne contiennent d'ailleurs **aucun fil** : toute la connectivité
+passe par des étiquettes globales posées sur le point de connexion de chaque
+broche. C'est ce qui permet d'ajouter un composant par script sans rien router.
+
+---
+
+## Concevoir avec un agent
+
+Une part inhabituelle du travail est faite par un agent : lire les datasheets,
+en extraire les contraintes, écrire la spécification, générer les symboles,
+poser les composants et choisir les boîtiers. **Le placement et le routage
+restent manuels** — ils encodent des choix que rien ne devine sur une chaîne de
+mesure de courant.
+
+[`doc/methode-kicad-claude.md`](doc/methode-kicad-claude.md) documente cette
+façon de travailler : le partage des rôles, le déroulé d'une séance, et surtout
+les pièges de format rencontrés — chacun avec sa signature, parce que KiCad
+répond « échec du chargement » et rien de plus quand un fichier est malformé.
+
 ---
 
 ## Projets KiCad
