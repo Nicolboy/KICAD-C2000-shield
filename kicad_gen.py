@@ -27,6 +27,24 @@ VIA_DRILL = 0.8
 CLEARANCE = 0.3
 
 
+def refuser_si_kicad_ouvert(schema):
+    """Sort en erreur si KiCad tient le projet ouvert.
+
+    KiCad travaille sur une copie en memoire et la reecrit sur le disque a
+    l'enregistrement : une modification faite pendant ce temps est perdue sans
+    le moindre avertissement. C'est arrive une fois, les empreintes corrigees
+    ici ont ete annulees en silence. Le CLAUDE.md pose la regle — ce garde-fou
+    la rend executable plutot que de compter sur la vigilance.
+    """
+    lock = schema.resolve().parent / ("~%s.kicad_pro.lck" % schema.stem)
+    if lock.exists():
+        raise SystemExit(
+            "%s est ouvert dans KiCad (%s).\n"
+            "Ferme-le d'abord : sinon KiCad reecrira le fichier par-dessus "
+            "cette modification, sans rien signaler." % (schema.stem, lock.name)
+        )
+
+
 def uid():
     return str(uuid.uuid4())
 

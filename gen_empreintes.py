@@ -19,7 +19,9 @@ import argparse
 import re
 from pathlib import Path
 
+from kicad_gen import refuser_si_kicad_ouvert
 from gen_composants import sexp_block
+
 
 LIB_ID = re.compile(r'\(symbol\s*\n?\s*\(lib_id "([^"]+)"')
 REF = re.compile(r'\(property "Reference"\s*\n?\s*"([^"]+)"')
@@ -74,6 +76,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("schema", type=Path)
     args = ap.parse_args()
+    refuser_si_kicad_ouvert(args.schema)
     text = args.schema.read_text(encoding="utf-8")
     known = library_footprints(text, args.schema.resolve().parent)
 

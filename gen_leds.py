@@ -20,6 +20,9 @@ import argparse
 import re
 from pathlib import Path
 
+from kicad_gen import refuser_si_kicad_ouvert
+
+
 # Etiquette a poser sur chaque pastille. Les noms TP_* sont ceux qu'ont pris
 # les quatre broches retirees du connecteur lors du passage en 2 x 28.
 MOVE = {
@@ -54,6 +57,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("schema", type=Path)
     args = ap.parse_args()
+    refuser_si_kicad_ouvert(args.schema)
     text = args.schema.read_text(encoding="utf-8")
     FREE = FREE_BY_VARIANT[variant_of(args.schema)]
 

@@ -19,6 +19,9 @@ import re
 import uuid
 from pathlib import Path
 
+from kicad_gen import refuser_si_kicad_ouvert
+
+
 KILIB = Path(r"C:/Program Files/KiCad/10.0/share/kicad/symbols")
 
 # --------------------------------------------------------------------------
@@ -265,6 +268,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("schema", type=Path)
     args = ap.parse_args()
+    refuser_si_kicad_ouvert(args.schema)
 
     text = args.schema.read_text(encoding="utf-8")
     project = args.schema.stem
