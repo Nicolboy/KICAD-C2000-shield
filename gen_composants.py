@@ -140,34 +140,32 @@ def lib_symbol(lib_id):
     """
     lib, name = lib_id.split(":")
     text = (KILIB / (lib + ".kicad_sym")).read_text(encoding="utf-8")
-    block = _raw_symbol(text, name)
 
-    seen = {name}
+    # Remonter la chaine d'heritage jusqu'au symbole qui porte vraiment les
+    # broches. On repart alors de CE bloc, entier et bien forme, plutot que
+    # de recoller deux morceaux : une greffe de sous-unites produit un
+    # s-expression que KiCad refuse de charger, sans rien dire de plus qu'un
+    # « echec du chargement ».
+    ancestry = [name]
+    block = _raw_symbol(text, name)
     m = re.search(r'\(extends "([^"]+)"', block)
     while m:
         parent = m.group(1)
-        if parent in seen:
+        if parent in ancestry:
             raise SystemExit("heritage circulaire sur %s" % lib_id)
-        seen.add(parent)
-        pblock = _raw_symbol(text, parent)
-        # On garde les proprietes de la variante et la geometrie du parent :
-        # seules les sous-unites portent les broches.
-        units = re.findall(r'\n\t\t\(symbol "%s_\d+_\d+"' % re.escape(parent),
-                           pblock)
-        if units:
-            start = pblock.index(units[0])
-            block = block.rstrip().rstrip(")").rstrip() + "\n" \
-                + pblock[start:].rstrip().rstrip(")").rstrip() + "\n\t)"
-            break
-        m = re.search(r'\(extends "([^"]+)"', pblock)
-        block = pblock
+        ancestry.append(parent)
+        block = _raw_symbol(text, parent)
+        m = re.search(r'\(extends "([^"]+)"', block)
 
-    block = re.sub(r'\n\s*\(extends "[^"]+"\)', "", block)
-    block = re.sub(r'\(symbol "%s_(\d+_\d+)"' % re.escape(name.split(":")[-1]),
-                   r'(symbol "%s_\1"' % lib_id, block)
-    for p in seen:
-        block = block.replace('(symbol "%s_' % p, '(symbol "%s_' % lib_id)
-    return block.replace('(symbol "%s"' % name, '(symbol "%s"' % lib_id, 1)
+    # Le bloc est celui de l'ancetre : le renommer au nom demande, lui et
+    # toutes ses sous-unites.
+    root = ancestry[-1]
+    block = block.replace('(symbol "%s_' % root, '(symbol "%s_' % lib_id)
+    block = block.replace('(symbol "%s"' % root, '(symbol "%s"' % lib_id, 1)
+    # La valeur affichee doit rester celle de la variante, pas de l'ancetre.
+    block = re.sub(r'(\(property "Value" ")[^"]*(")',
+                   lambda mm: mm.group(1) + name + mm.group(2), block, count=1)
+    return block
 
 
 PIN_RE = re.compile(
@@ -204,7 +202,7 @@ def instance(ref, lib_id, value, footprint, x, y, pins, project, sch_uuid):
         '\t\t(property "Value" "%s" (at %.2f %.2f 0)'
         ' (effects (font (size 1.27 1.27))))' % (esc(value), x + 2.54, y),
         '\t\t(property "Footprint" "%s" (at %.2f %.2f 0)'
-        ' (effects (font (size 1.27 1.27)) hide))' % (esc(footprint), x, y),
+        ' (effects (font (size 1.27 1.27)) (hide yes)))' % (esc(footprint), x, y),
     ]
     for num in sorted(pins, key=lambda n: (len(n), n)):
         out.append('\t\t(pin "%s" (uuid "%s"))' % (num, uid()))
@@ -282,3 +280,17 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+# ETAT : NE PAS UTILISER EN L'ETAT.
+#
+# Le script calcule juste — brochages resolus depuis les librairies, heritage
+# (extends) traite, parentheses equilibrees, 23 composants et leurs etiquettes
+# aux bonnes coordonnees. Mais le fichier produit ne se charge pas dans KiCad,
+# et l'echec vient de l'insertion des blocs (lib_symbols), pas des instances :
+# inserer la seule definition de Device:R, sans aucune instance, suffit a le
+# reproduire. Teste sur un schema au format KiCad 8 et sur un au format
+# KiCad 10 : meme resultat, ce n'est donc pas une histoire de version.
+#
+# Piste suivante : ne pas recopier les blocs a la main, mais laisser KiCad les
+# ecrire — poser les composants via kipy sur l'instance ouverte, comme le
+# CLAUDE.md l'impose deja pour les PCB.

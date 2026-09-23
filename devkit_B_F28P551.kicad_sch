@@ -2923,7 +2923,7 @@
 			)
 		)
 	)
-	(global_label "LED_R"
+	(global_label "TP_PIN28"
 		(shape bidirectional)
 		(at 135.89 147.32 270)
 		(effects
@@ -4045,7 +4045,7 @@
 			)
 		)
 	)
-	(global_label "TP_PIN54"
+	(global_label "LED_R"
 		(shape bidirectional)
 		(at 133.35 55.88 90)
 		(effects
@@ -4683,7 +4683,7 @@
 			)
 		)
 	)
-	(global_label "TP_PIN53"
+	(global_label "LED_B"
 		(shape bidirectional)
 		(at 135.89 55.88 90)
 		(effects
@@ -5233,7 +5233,7 @@
 			)
 		)
 	)
-	(global_label "LED_B"
+	(global_label "TP_PIN27"
 		(shape bidirectional)
 		(at 133.35 147.32 270)
 		(effects
