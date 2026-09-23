@@ -140,9 +140,11 @@ seulement. Sur le PCB B, VREGENZ (broche 46) est reliée à VSS pour activer ce
 régulateur ; le F280037 en 64 PM non-Q n'a pas cette broche, son régulateur est
 toujours actif.
 
-**OR-ing d'entrée** : deux Schottky, l'une depuis VBUS de l'USB, l'autre depuis
-B2, réunies en entrée des deux LDO. Permet de faire tourner le devkit seul en
-développement sans refouler de courant vers la carte de puissance.
+**Pas d'OR-ing.** Deux sources possibles sur le rail 3,3 V — la sortie des LDO
+depuis le +5 V de B2, et le 3,3 V entrant par le connecteur JTAG — mais aucun
+arbitrage matériel : **ne pas alimenter des deux côtés à la fois**. Une Schottky
+en série a été écartée, ses 0,3 V de chute amèneraient VDDIO à 3,0 V, sous le
+seuil de brownout (SPRSPC5 §6.5).
 
 **Masses** : VSS et VSSA réunies en un point unique près du boîtier, sous les
 broches 21 et 26. Une seule masse au connecteur. Quatre couches recommandées,
@@ -157,10 +159,15 @@ fonctionnel, sans prétention sur le bruit (`decisions.md` §12).
 Embase **cTBP 10 points** : TCK 36, TDO 37, TMS 38, TDI 39, plus XRSn, 3,3 V et
 masse.
 
-**Ces MCU n'ont pas de broche TRSTn** — SPRSP61C le dit dans la description de
-TMS. Prévoir un **rappel de 2,2 kΩ sur TMS vers VDDIO** : c'est lui qui maintient
-le JTAG en reset pendant le fonctionnement normal. Ne pas reprendre le /TRST du
-schéma F28027.
+**Ces MCU n'ont pas de broche TRSTn.** Vérifié dans SPRSPC5 §5.3 et §5.4, qui
+l'écrit deux fois : « This device does not have a TRSTn pin ». Prévoir un
+**rappel de 2,2 kΩ sur TMS vers VDDIO** : c'est lui qui maintient le JTAG en
+reset pendant le fonctionnement normal. Ne pas reprendre le /TRST du schéma
+F28027.
+
+**Ne pas confondre TRST et nRST.** La broche 3 est XRSn, le reset du composant,
+à relier au RESET du connecteur JTAG — drain ouvert, la sonde peut le tirer bas.
+TRST est le reset de la chaîne JTAG, et il n'existe pas ici.
 
 **Reset** : bouton-poussoir vers VSS sur XRSn (broche 3), rappel 2,2 à 10 kΩ vers
 VDDIO, condensateur ≤ 100 nF vers VSS. La même broche sort en B3, attaquée **en
@@ -181,10 +188,32 @@ identique à 100 % sur les deux PCB.
 GPIO20 et GPIO21 sont des broches analogiques sur le F28P551 : le firmware doit
 écrire `GPIOHAMSEL` pour les utiliser en numérique.
 
-**Cavalier de mode boot sur GPIO24 (broche 35)**, également sorti en B4. Position
-haute = Flash, position basse = boot SCI ROM. La configuration OTP retenue,
-`BOOTPIN_CONFIG = 0x5AFF18FF`, n'active qu'une seule broche de sélection et
-libère GPIO32. Essayer via `EMU_BOOTPIN_CONFIG` avant de brûler l'OTP.
+**Modes retenus : Flash seul.** Le chargement en RAM se fait par le JTAG, qui
+arrête le cœur et écrit directement — il ne demande aucun mode de boot.
+
+SPRSPC5 table 7-8, modes par défaut. Deux broches de sélection, pas une :
+
+| Mode | GPIO24 (BMSP1) | GPIO32 (BMSP0) |
+|---|---|---|
+| Parallel IO | 0 | 0 |
+| SCI / Wait Boot | 0 | 1 |
+| CAN | 1 | 0 |
+| **Flash** | **1** | **1** |
+
+**Les deux broches demandent un rappel externe de 10 kΩ vers VDDIO.** SPRSPC5
+§5.5 est formel : les rappels internes des GPIO sont désactivés au reset *et
+pendant le boot*. Deux broches laissées flottantes donnent un mode de démarrage
+indéterminé — et le tirage inclut Parallel IO, qui se met à piloter des broches.
+
+Pas de cavalier : la table par défaut suffit, l'OTP n'a pas à être brûlé.
+`BOOTPIN_CONFIG = 0x5AFF18FF` reste disponible si l'on veut plus tard libérer
+GPIO32, mais ce n'est plus nécessaire.
+
+**Conséquence sur le PCB A, à trancher.** La LED rouge y est sur GPIO32. Avec un
+rappel de 10 kΩ et une LED en série, la broche se stabilise vers 2,1 V au reset,
+sous le VIH de 0,7 × VDDIO = 2,31 V : le boot lirait 0 et partirait en mode CAN.
+Les deux fonctions sont incompatibles sur cette broche. Le PCB B n'a pas le
+problème, GPIO32 (broche 40) y est une simple pastille de test.
 
 ---
 
