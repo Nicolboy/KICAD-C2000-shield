@@ -209,11 +209,42 @@ Pas de cavalier : la table par défaut suffit, l'OTP n'a pas à être brûlé.
 `BOOTPIN_CONFIG = 0x5AFF18FF` reste disponible si l'on veut plus tard libérer
 GPIO32, mais ce n'est plus nécessaire.
 
-**Conséquence sur le PCB A, à trancher.** La LED rouge y est sur GPIO32. Avec un
-rappel de 10 kΩ et une LED en série, la broche se stabilise vers 2,1 V au reset,
-sous le VIH de 0,7 × VDDIO = 2,31 V : le boot lirait 0 et partirait en mode CAN.
-Les deux fonctions sont incompatibles sur cette broche. Le PCB B n'a pas le
-problème, GPIO32 (broche 40) y est une simple pastille de test.
+### Les deux résistances de boot
+
+| Repère | Valeur | Broche | Rôle |
+|---|---|---|---|
+| R3 | 10 kΩ → VDDIO | GPIO24 (35), sortie en B4 | Flash par défaut, **l'ESP32 la tire à 0** pour le boot SCI |
+| R4 | 10 kΩ → VDDIO | GPIO32 (40) | fixe à 1, jamais piloté |
+
+GPIO32 doit valoir 1 dans les deux modes utilisés — Flash `1 1` et SCI `0 1`.
+C'est la seule broche des deux qui ne bouge jamais : **rien d'autre ne doit y
+être connecté**, ni LED ni charge.
+
+GPIO24 garde son rappel *et* reste pilotable depuis le connecteur : le rappel
+impose Flash au repos, l'ESP32 force le boot SCI en tirant B4 à zéro. C'est le
+chemin de mise à jour par liaison série décrit au §2.
+
+**Prévoir une pastille de test sur GPIO24.** Si la Flash contient un programme
+qui se plante trop tôt, c'est la seule porte de secours — une pince à la masse
+et le composant repart en boot SCI.
+
+### Les LED déménagent sur les pastilles de test
+
+GPIO32 étant réservé au boot, et GPIO39 étant la seule autre E/S non commune du
+PCB A, les deux LED sont reportées sur des broches **communes aux deux
+boîtiers**, choisies parmi les quatre libérées du connecteur — celles qui ont le
+moins de fonctions alternatives à sacrifier :
+
+| Fonctions alternatives | Broche | GPIO | Affectation |
+|---|---|---|---|
+| 7 | 54 | GPIO23 | **LED rouge** |
+| 9 | 53 | GPIO40 | **LED bleue** |
+| 9 | 55 | GPIO41 | pastille de test |
+| 12 | 62 | GPIO9 | pastille de test, la plus riche — à garder libre |
+
+Les broches 53 et 54 sont contiguës, ce qui convient à une LED 3 mm à trois
+broches. Conséquence utile : **les LED deviennent identiques sur les deux PCB**,
+et GPIO32 comme GPIO39 sont rendus à leur rôle.
 
 ---
 
