@@ -5,6 +5,902 @@
 	(uuid "f18a0d56-6408-3a9a-a25e-7b7d065da837")
 	(paper "A2")
 	(lib_symbols
+  	(symbol "Regulator_Linear:MCP1700x-330xxTT"
+  		(pin_names
+  			(offset 0.254)
+  		)
+  		(exclude_from_sim no)
+  		(in_bom yes)
+  		(on_board yes)
+  		(in_pos_files yes)
+  		(duplicate_pin_numbers_are_jumpers no)
+  		(property "Reference" "U"
+  			(at -3.81 3.175 0)
+  			(show_name no)
+  			(do_not_autoplace no)
+  			(effects
+  				(font
+  					(size 1.27 1.27)
+  				)
+  			)
+  		)
+  		(property "Value" "MCP1700x-330xxTT"
+  			(at 0 3.175 0)
+  			(show_name no)
+  			(do_not_autoplace no)
+  			(effects
+  				(font
+  					(size 1.27 1.27)
+  				)
+  				(justify left)
+  			)
+  		)
+  		(property "Footprint" "Package_TO_SOT_SMD:SOT-23"
+  			(at 0 5.715 0)
+  			(show_name no)
+  			(do_not_autoplace no)
+  			(hide yes)
+  			(effects
+  				(font
+  					(size 1.27 1.27)
+  				)
+  			)
+  		)
+  		(property "Datasheet" "http://ww1.microchip.com/downloads/en/DeviceDoc/20001826D.pdf"
+  			(at 0 0 0)
+  			(show_name no)
+  			(do_not_autoplace no)
+  			(hide yes)
+  			(effects
+  				(font
+  					(size 1.27 1.27)
+  				)
+  			)
+  		)
+  		(property "Description" "250mA Low Quiscent Current LDO, 3.3V output, SOT-23"
+  			(at 0 0 0)
+  			(show_name no)
+  			(do_not_autoplace no)
+  			(hide yes)
+  			(effects
+  				(font
+  					(size 1.27 1.27)
+  				)
+  			)
+  		)
+  		(property "ki_keywords" "regulator linear ldo"
+  			(at 0 0 0)
+  			(show_name no)
+  			(do_not_autoplace no)
+  			(hide yes)
+  			(effects
+  				(font
+  					(size 1.27 1.27)
+  				)
+  			)
+  		)
+  		(property "ki_fp_filters" "SOT?23*"
+  			(at 0 0 0)
+  			(show_name no)
+  			(do_not_autoplace no)
+  			(hide yes)
+  			(effects
+  				(font
+  					(size 1.27 1.27)
+  				)
+  			)
+  		)
+  		(symbol "MCP1700x-330xxTT_0_1"
+  			(rectangle
+  				(start -5.08 1.905)
+  				(end 5.08 -5.08)
+  				(stroke
+  					(width 0.254)
+  					(type default)
+  				)
+  				(fill
+  					(type background)
+  				)
+  			)
+  		)
+  		(symbol "MCP1700x-330xxTT_1_1"
+  			(pin power_in line
+  				(at 0 -7.62 90)
+  				(length 2.54)
+  				(name "GND"
+  					(effects
+  						(font
+  							(size 1.27 1.27)
+  						)
+  					)
+  				)
+  				(number "1"
+  					(effects
+  						(font
+  							(size 1.27 1.27)
+  						)
+  					)
+  				)
+  			)
+  			(pin power_out line
+  				(at 7.62 0 180)
+  				(length 2.54)
+  				(name "VO"
+  					(effects
+  						(font
+  							(size 1.27 1.27)
+  						)
+  					)
+  				)
+  				(number "2"
+  					(effects
+  						(font
+  							(size 1.27 1.27)
+  						)
+  					)
+  				)
+  			)
+  			(pin power_in line
+  				(at -7.62 0 0)
+  				(length 2.54)
+  				(name "VI"
+  					(effects
+  						(font
+  							(size 1.27 1.27)
+  						)
+  					)
+  				)
+  				(number "3"
+  					(effects
+  						(font
+  							(size 1.27 1.27)
+  						)
+  					)
+  				)
+  			)
+  		)
+  		(embedded_fonts no)
+  	)
+  	(symbol "Device:C"
+  		(pin_numbers
+  			(hide yes)
+  		)
+  		(pin_names
+  			(offset 0.254)
+  		)
+  		(exclude_from_sim no)
+  		(in_bom yes)
+  		(on_board yes)
+  		(in_pos_files yes)
+  		(duplicate_pin_numbers_are_jumpers no)
+  		(property "Reference" "C"
+  			(at 0.635 2.54 0)
+  			(show_name no)
+  			(do_not_autoplace no)
+  			(effects
+  				(font
+  					(size 1.27 1.27)
+  				)
+  				(justify left)
+  			)
+  		)
+  		(property "Value" "C"
+  			(at 0.635 -2.54 0)
+  			(show_name no)
+  			(do_not_autoplace no)
+  			(effects
+  				(font
+  					(size 1.27 1.27)
+  				)
+  				(justify left)
+  			)
+  		)
+  		(property "Footprint" ""
+  			(at 0.9652 -3.81 0)
+  			(show_name no)
+  			(do_not_autoplace no)
+  			(hide yes)
+  			(effects
+  				(font
+  					(size 1.27 1.27)
+  				)
+  			)
+  		)
+  		(property "Datasheet" ""
+  			(at 0 0 0)
+  			(show_name no)
+  			(do_not_autoplace no)
+  			(hide yes)
+  			(effects
+  				(font
+  					(size 1.27 1.27)
+  				)
+  			)
+  		)
+  		(property "Description" "Unpolarized capacitor"
+  			(at 0 0 0)
+  			(show_name no)
+  			(do_not_autoplace no)
+  			(hide yes)
+  			(effects
+  				(font
+  					(size 1.27 1.27)
+  				)
+  			)
+  		)
+  		(property "ki_keywords" "cap capacitor"
+  			(at 0 0 0)
+  			(show_name no)
+  			(do_not_autoplace no)
+  			(hide yes)
+  			(effects
+  				(font
+  					(size 1.27 1.27)
+  				)
+  			)
+  		)
+  		(property "ki_fp_filters" "C_*"
+  			(at 0 0 0)
+  			(show_name no)
+  			(do_not_autoplace no)
+  			(hide yes)
+  			(effects
+  				(font
+  					(size 1.27 1.27)
+  				)
+  			)
+  		)
+  		(symbol "C_0_1"
+  			(polyline
+  				(pts
+  					(xy -2.032 0.762) (xy 2.032 0.762)
+  				)
+  				(stroke
+  					(width 0.508)
+  					(type default)
+  				)
+  				(fill
+  					(type none)
+  				)
+  			)
+  			(polyline
+  				(pts
+  					(xy -2.032 -0.762) (xy 2.032 -0.762)
+  				)
+  				(stroke
+  					(width 0.508)
+  					(type default)
+  				)
+  				(fill
+  					(type none)
+  				)
+  			)
+  		)
+  		(symbol "C_1_1"
+  			(pin passive line
+  				(at 0 3.81 270)
+  				(length 2.794)
+  				(name ""
+  					(effects
+  						(font
+  							(size 1.27 1.27)
+  						)
+  					)
+  				)
+  				(number "1"
+  					(effects
+  						(font
+  							(size 1.27 1.27)
+  						)
+  					)
+  				)
+  			)
+  			(pin passive line
+  				(at 0 -3.81 90)
+  				(length 2.794)
+  				(name ""
+  					(effects
+  						(font
+  							(size 1.27 1.27)
+  						)
+  					)
+  				)
+  				(number "2"
+  					(effects
+  						(font
+  							(size 1.27 1.27)
+  						)
+  					)
+  				)
+  			)
+  		)
+  		(embedded_fonts no)
+  	)
+  	(symbol "Device:R"
+  		(pin_numbers
+  			(hide yes)
+  		)
+  		(pin_names
+  			(offset 0)
+  		)
+  		(exclude_from_sim no)
+  		(in_bom yes)
+  		(on_board yes)
+  		(in_pos_files yes)
+  		(duplicate_pin_numbers_are_jumpers no)
+  		(property "Reference" "R"
+  			(at 2.032 0 90)
+  			(show_name no)
+  			(do_not_autoplace no)
+  			(effects
+  				(font
+  					(size 1.27 1.27)
+  				)
+  			)
+  		)
+  		(property "Value" "R"
+  			(at 0 0 90)
+  			(show_name no)
+  			(do_not_autoplace no)
+  			(effects
+  				(font
+  					(size 1.27 1.27)
+  				)
+  			)
+  		)
+  		(property "Footprint" ""
+  			(at -1.778 0 90)
+  			(show_name no)
+  			(do_not_autoplace no)
+  			(hide yes)
+  			(effects
+  				(font
+  					(size 1.27 1.27)
+  				)
+  			)
+  		)
+  		(property "Datasheet" ""
+  			(at 0 0 0)
+  			(show_name no)
+  			(do_not_autoplace no)
+  			(hide yes)
+  			(effects
+  				(font
+  					(size 1.27 1.27)
+  				)
+  			)
+  		)
+  		(property "Description" "Resistor"
+  			(at 0 0 0)
+  			(show_name no)
+  			(do_not_autoplace no)
+  			(hide yes)
+  			(effects
+  				(font
+  					(size 1.27 1.27)
+  				)
+  			)
+  		)
+  		(property "ki_keywords" "R res resistor"
+  			(at 0 0 0)
+  			(show_name no)
+  			(do_not_autoplace no)
+  			(hide yes)
+  			(effects
+  				(font
+  					(size 1.27 1.27)
+  				)
+  			)
+  		)
+  		(property "ki_fp_filters" "R_*"
+  			(at 0 0 0)
+  			(show_name no)
+  			(do_not_autoplace no)
+  			(hide yes)
+  			(effects
+  				(font
+  					(size 1.27 1.27)
+  				)
+  			)
+  		)
+  		(symbol "R_0_1"
+  			(rectangle
+  				(start -1.016 -2.54)
+  				(end 1.016 2.54)
+  				(stroke
+  					(width 0.254)
+  					(type default)
+  				)
+  				(fill
+  					(type none)
+  				)
+  			)
+  		)
+  		(symbol "R_1_1"
+  			(pin passive line
+  				(at 0 3.81 270)
+  				(length 1.27)
+  				(name ""
+  					(effects
+  						(font
+  							(size 1.27 1.27)
+  						)
+  					)
+  				)
+  				(number "1"
+  					(effects
+  						(font
+  							(size 1.27 1.27)
+  						)
+  					)
+  				)
+  			)
+  			(pin passive line
+  				(at 0 -3.81 90)
+  				(length 1.27)
+  				(name ""
+  					(effects
+  						(font
+  							(size 1.27 1.27)
+  						)
+  					)
+  				)
+  				(number "2"
+  					(effects
+  						(font
+  							(size 1.27 1.27)
+  						)
+  					)
+  				)
+  			)
+  		)
+  		(embedded_fonts no)
+  	)
+  	(symbol "Connector_Generic:Conn_01x02"
+  		(pin_names
+  			(offset 1.016)
+  			(hide yes)
+  		)
+  		(exclude_from_sim no)
+  		(in_bom yes)
+  		(on_board yes)
+  		(in_pos_files yes)
+  		(duplicate_pin_numbers_are_jumpers no)
+  		(property "Reference" "J"
+  			(at 0 2.54 0)
+  			(show_name no)
+  			(do_not_autoplace no)
+  			(effects
+  				(font
+  					(size 1.27 1.27)
+  				)
+  			)
+  		)
+  		(property "Value" "Conn_01x02"
+  			(at 0 -5.08 0)
+  			(show_name no)
+  			(do_not_autoplace no)
+  			(effects
+  				(font
+  					(size 1.27 1.27)
+  				)
+  			)
+  		)
+  		(property "Footprint" ""
+  			(at 0 0 0)
+  			(show_name no)
+  			(do_not_autoplace no)
+  			(hide yes)
+  			(effects
+  				(font
+  					(size 1.27 1.27)
+  				)
+  			)
+  		)
+  		(property "Datasheet" ""
+  			(at 0 0 0)
+  			(show_name no)
+  			(do_not_autoplace no)
+  			(hide yes)
+  			(effects
+  				(font
+  					(size 1.27 1.27)
+  				)
+  			)
+  		)
+  		(property "Description" "Generic connector, single row, 01x02, script generated (kicad-library-utils/schlib/autogen/connector/)"
+  			(at 0 0 0)
+  			(show_name no)
+  			(do_not_autoplace no)
+  			(hide yes)
+  			(effects
+  				(font
+  					(size 1.27 1.27)
+  				)
+  			)
+  		)
+  		(property "ki_keywords" "connector"
+  			(at 0 0 0)
+  			(show_name no)
+  			(do_not_autoplace no)
+  			(hide yes)
+  			(effects
+  				(font
+  					(size 1.27 1.27)
+  				)
+  			)
+  		)
+  		(property "ki_fp_filters" "Connector*:*_1x??_*"
+  			(at 0 0 0)
+  			(show_name no)
+  			(do_not_autoplace no)
+  			(hide yes)
+  			(effects
+  				(font
+  					(size 1.27 1.27)
+  				)
+  			)
+  		)
+  		(symbol "Conn_01x02_1_1"
+  			(rectangle
+  				(start -1.27 1.27)
+  				(end 1.27 -3.81)
+  				(stroke
+  					(width 0.254)
+  					(type default)
+  				)
+  				(fill
+  					(type background)
+  				)
+  			)
+  			(rectangle
+  				(start -1.27 0.127)
+  				(end 0 -0.127)
+  				(stroke
+  					(width 0.1524)
+  					(type default)
+  				)
+  				(fill
+  					(type none)
+  				)
+  			)
+  			(rectangle
+  				(start -1.27 -2.413)
+  				(end 0 -2.667)
+  				(stroke
+  					(width 0.1524)
+  					(type default)
+  				)
+  				(fill
+  					(type none)
+  				)
+  			)
+  			(pin passive line
+  				(at -5.08 0 0)
+  				(length 3.81)
+  				(name "Pin_1"
+  					(effects
+  						(font
+  							(size 1.27 1.27)
+  						)
+  					)
+  				)
+  				(number "1"
+  					(effects
+  						(font
+  							(size 1.27 1.27)
+  						)
+  					)
+  				)
+  			)
+  			(pin passive line
+  				(at -5.08 -2.54 0)
+  				(length 3.81)
+  				(name "Pin_2"
+  					(effects
+  						(font
+  							(size 1.27 1.27)
+  						)
+  					)
+  				)
+  				(number "2"
+  					(effects
+  						(font
+  							(size 1.27 1.27)
+  						)
+  					)
+  				)
+  			)
+  		)
+  		(embedded_fonts no)
+  	)
+  	(symbol "Device:LED_Dual_AKA"
+  		(pin_names
+  			(offset 0)
+  			(hide yes)
+  		)
+  		(exclude_from_sim no)
+  		(in_bom yes)
+  		(on_board yes)
+  		(in_pos_files yes)
+  		(duplicate_pin_numbers_are_jumpers no)
+  		(property "Reference" "D"
+  			(at 0 5.715 0)
+  			(show_name no)
+  			(do_not_autoplace no)
+  			(effects
+  				(font
+  					(size 1.27 1.27)
+  				)
+  			)
+  		)
+  		(property "Value" "LED_Dual_AKA"
+  			(at 0 -6.35 0)
+  			(show_name no)
+  			(do_not_autoplace no)
+  			(effects
+  				(font
+  					(size 1.27 1.27)
+  				)
+  			)
+  		)
+  		(property "Footprint" ""
+  			(at 0 0 0)
+  			(show_name no)
+  			(do_not_autoplace no)
+  			(hide yes)
+  			(effects
+  				(font
+  					(size 1.27 1.27)
+  				)
+  			)
+  		)
+  		(property "Datasheet" ""
+  			(at 0 0 0)
+  			(show_name no)
+  			(do_not_autoplace no)
+  			(hide yes)
+  			(effects
+  				(font
+  					(size 1.27 1.27)
+  				)
+  			)
+  		)
+  		(property "Description" "Dual LED, common cathode on pin 2"
+  			(at 0 0 0)
+  			(show_name no)
+  			(do_not_autoplace no)
+  			(hide yes)
+  			(effects
+  				(font
+  					(size 1.27 1.27)
+  				)
+  			)
+  		)
+  		(property "ki_keywords" "LED diode bicolor dual"
+  			(at 0 0 0)
+  			(show_name no)
+  			(do_not_autoplace no)
+  			(hide yes)
+  			(effects
+  				(font
+  					(size 1.27 1.27)
+  				)
+  			)
+  		)
+  		(property "ki_fp_filters" "LED* LED_SMD:* LED_THT:*"
+  			(at 0 0 0)
+  			(show_name no)
+  			(do_not_autoplace no)
+  			(hide yes)
+  			(effects
+  				(font
+  					(size 1.27 1.27)
+  				)
+  			)
+  		)
+  		(symbol "LED_Dual_AKA_0_1"
+  			(polyline
+  				(pts
+  					(xy -4.572 0) (xy -2.54 0)
+  				)
+  				(stroke
+  					(width 0)
+  					(type default)
+  				)
+  				(fill
+  					(type none)
+  				)
+  			)
+  			(circle
+  				(center -2.54 0)
+  				(radius 0.2794)
+  				(stroke
+  					(width 0)
+  					(type default)
+  				)
+  				(fill
+  					(type outline)
+  				)
+  			)
+  			(polyline
+  				(pts
+  					(xy -1.27 1.27) (xy -1.27 3.81)
+  				)
+  				(stroke
+  					(width 0.254)
+  					(type default)
+  				)
+  				(fill
+  					(type none)
+  				)
+  			)
+  			(polyline
+  				(pts
+  					(xy -1.27 -1.27) (xy -1.27 -3.81)
+  				)
+  				(stroke
+  					(width 0.254)
+  					(type default)
+  				)
+  				(fill
+  					(type none)
+  				)
+  			)
+  			(circle
+  				(center 0 0)
+  				(radius 4.572)
+  				(stroke
+  					(width 0.254)
+  					(type default)
+  				)
+  				(fill
+  					(type background)
+  				)
+  			)
+  			(polyline
+  				(pts
+  					(xy 1.27 1.27) (xy 1.27 3.81) (xy -1.27 2.54) (xy 1.27 1.27)
+  				)
+  				(stroke
+  					(width 0.254)
+  					(type default)
+  				)
+  				(fill
+  					(type none)
+  				)
+  			)
+  			(polyline
+  				(pts
+  					(xy 1.27 -3.81) (xy 1.27 -1.27) (xy -1.27 -2.54) (xy 1.27 -3.81)
+  				)
+  				(stroke
+  					(width 0.254)
+  					(type default)
+  				)
+  				(fill
+  					(type none)
+  				)
+  			)
+  			(polyline
+  				(pts
+  					(xy 2.032 5.08) (xy 3.556 6.604) (xy 2.794 6.604) (xy 3.556 6.604) (xy 3.556 5.842)
+  				)
+  				(stroke
+  					(width 0)
+  					(type default)
+  				)
+  				(fill
+  					(type none)
+  				)
+  			)
+  			(polyline
+  				(pts
+  					(xy 2.032 2.54) (xy -2.54 2.54) (xy -2.54 -2.54) (xy 2.032 -2.54)
+  				)
+  				(stroke
+  					(width 0)
+  					(type default)
+  				)
+  				(fill
+  					(type none)
+  				)
+  			)
+  			(polyline
+  				(pts
+  					(xy 3.302 4.064) (xy 4.826 5.588) (xy 4.064 5.588) (xy 4.826 5.588) (xy 4.826 4.826)
+  				)
+  				(stroke
+  					(width 0)
+  					(type default)
+  				)
+  				(fill
+  					(type none)
+  				)
+  			)
+  			(polyline
+  				(pts
+  					(xy 3.81 2.54) (xy 1.905 2.54)
+  				)
+  				(stroke
+  					(width 0)
+  					(type default)
+  				)
+  				(fill
+  					(type none)
+  				)
+  			)
+  			(polyline
+  				(pts
+  					(xy 3.81 -2.54) (xy 1.905 -2.54)
+  				)
+  				(stroke
+  					(width 0)
+  					(type default)
+  				)
+  				(fill
+  					(type none)
+  				)
+  			)
+  		)
+  		(symbol "LED_Dual_AKA_1_1"
+  			(pin input line
+  				(at 7.62 2.54 180)
+  				(length 3.81)
+  				(name "A1"
+  					(effects
+  						(font
+  							(size 1.27 1.27)
+  						)
+  					)
+  				)
+  				(number "1"
+  					(effects
+  						(font
+  							(size 1.27 1.27)
+  						)
+  					)
+  				)
+  			)
+  			(pin input line
+  				(at -7.62 0 0)
+  				(length 3.048)
+  				(name "K"
+  					(effects
+  						(font
+  							(size 1.27 1.27)
+  						)
+  					)
+  				)
+  				(number "2"
+  					(effects
+  						(font
+  							(size 1.27 1.27)
+  						)
+  					)
+  				)
+  			)
+  			(pin input line
+  				(at 7.62 -2.54 180)
+  				(length 3.81)
+  				(name "A2"
+  					(effects
+  						(font
+  							(size 1.27 1.27)
+  						)
+  					)
+  				)
+  				(number "3"
+  					(effects
+  						(font
+  							(size 1.27 1.27)
+  						)
+  					)
+  				)
+  			)
+  		)
+  		(embedded_fonts no)
+  	)
 		(symbol "C2000_Devkit_Connectors:DEVKIT_C2000_ROW_A"
 			(exclude_from_sim no)
 			(in_bom yes)
@@ -6022,4 +6918,525 @@
 		)
 	)
 	(embedded_fonts no)
+	(symbol (lib_id "Regulator_Linear:MCP1700x-330xxTT") (at 38.10 241.30 0) (unit 1)
+		(exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+		(uuid "0b77b333-5f34-4336-84e8-8f1a19fbb185")
+		(property "Reference" "U2" (at 40.64 238.76 0) (effects (font (size 1.27 1.27))))
+		(property "Value" "MCP1700-3302E/TT" (at 40.64 241.30 0) (effects (font (size 1.27 1.27))))
+		(property "Footprint" "Package_TO_SOT_SMD:SOT-23" (at 38.10 241.30 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(pin "1" (uuid "a5fd6bac-5d58-4eb6-a610-0c90c70c3cd6"))
+		(pin "2" (uuid "ed8260ec-5cf9-42e7-8dba-0152b076cf26"))
+		(pin "3" (uuid "f2888f86-89ce-4c4b-8246-d8618315d41b"))
+		(instances
+			(project "devkit_B_F28P551"
+				(path "/f18a0d56-6408-3a9a-a25e-7b7d065da837" (reference "U2") (unit 1))
+			)
+		)
+	)
+	(global_label "GND" (shape bidirectional) (at 38.10 248.92 270)
+		(effects (font (size 1.27 1.27)) (justify right))
+		(uuid "c038e971-a748-44fd-8d6f-3e4239b8b0d1")
+	)
+	(global_label "VDDIO" (shape bidirectional) (at 45.72 241.30 0)
+		(effects (font (size 1.27 1.27)) (justify left))
+		(uuid "79aacd16-b063-4209-9c62-99da2767a89e")
+	)
+	(global_label "+5V" (shape bidirectional) (at 30.48 241.30 180)
+		(effects (font (size 1.27 1.27)) (justify right))
+		(uuid "8aad9818-fea5-47ed-af4c-0001ce49f795")
+	)
+	(symbol (lib_id "Regulator_Linear:MCP1700x-330xxTT") (at 63.50 241.30 0) (unit 1)
+		(exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+		(uuid "8fa200b5-f88a-4032-955f-02a16056eaf1")
+		(property "Reference" "U3" (at 66.04 238.76 0) (effects (font (size 1.27 1.27))))
+		(property "Value" "MCP1700-3302E/TT" (at 66.04 241.30 0) (effects (font (size 1.27 1.27))))
+		(property "Footprint" "Package_TO_SOT_SMD:SOT-23" (at 63.50 241.30 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(pin "1" (uuid "941afac8-ab51-4ce0-8ffd-424fc810e77a"))
+		(pin "2" (uuid "f4f6f914-bbd5-4ac2-ad19-8618ab56e94a"))
+		(pin "3" (uuid "e759217c-4d9e-4b67-bfeb-721bc94e6262"))
+		(instances
+			(project "devkit_B_F28P551"
+				(path "/f18a0d56-6408-3a9a-a25e-7b7d065da837" (reference "U3") (unit 1))
+			)
+		)
+	)
+	(global_label "GND" (shape bidirectional) (at 63.50 248.92 270)
+		(effects (font (size 1.27 1.27)) (justify right))
+		(uuid "50e7c374-2694-4fe5-b567-138361068251")
+	)
+	(global_label "VDDA" (shape bidirectional) (at 71.12 241.30 0)
+		(effects (font (size 1.27 1.27)) (justify left))
+		(uuid "4d778f00-5ea1-4521-9a33-27d9657fa6a5")
+	)
+	(global_label "+5V" (shape bidirectional) (at 55.88 241.30 180)
+		(effects (font (size 1.27 1.27)) (justify right))
+		(uuid "cdba0c6f-f26e-4f2b-bc26-75dfc6d73873")
+	)
+	(symbol (lib_id "Device:C") (at 88.90 241.30 0) (unit 1)
+		(exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+		(uuid "73badf0e-aa70-426f-8562-5c81dc543cf9")
+		(property "Reference" "C1" (at 91.44 238.76 0) (effects (font (size 1.27 1.27))))
+		(property "Value" "10u" (at 91.44 241.30 0) (effects (font (size 1.27 1.27))))
+		(property "Footprint" "Capacitor_SMD:C_0805_2012Metric" (at 88.90 241.30 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(pin "1" (uuid "9be0b1cd-7154-4417-a2b1-81a1ecf48857"))
+		(pin "2" (uuid "1faf82a8-78c8-4c83-98a9-490d17d20810"))
+		(instances
+			(project "devkit_B_F28P551"
+				(path "/f18a0d56-6408-3a9a-a25e-7b7d065da837" (reference "C1") (unit 1))
+			)
+		)
+	)
+	(global_label "+5V" (shape bidirectional) (at 88.90 237.49 90)
+		(effects (font (size 1.27 1.27)) (justify left))
+		(uuid "9beb75b0-aa51-4205-9bb8-c21c12eeab3b")
+	)
+	(global_label "GND" (shape bidirectional) (at 88.90 245.11 270)
+		(effects (font (size 1.27 1.27)) (justify right))
+		(uuid "a067a4d8-4d8a-4110-a1fd-581c2feb27f6")
+	)
+	(symbol (lib_id "Device:C") (at 114.30 241.30 0) (unit 1)
+		(exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+		(uuid "5cb19569-1b3d-44e0-8195-4d82c3ca78d7")
+		(property "Reference" "C2" (at 116.84 238.76 0) (effects (font (size 1.27 1.27))))
+		(property "Value" "10u" (at 116.84 241.30 0) (effects (font (size 1.27 1.27))))
+		(property "Footprint" "Capacitor_SMD:C_0805_2012Metric" (at 114.30 241.30 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(pin "1" (uuid "2a6cab51-0f41-4091-8376-43904d4e00a1"))
+		(pin "2" (uuid "76f849d8-32ce-43d8-b69b-03609b8e540d"))
+		(instances
+			(project "devkit_B_F28P551"
+				(path "/f18a0d56-6408-3a9a-a25e-7b7d065da837" (reference "C2") (unit 1))
+			)
+		)
+	)
+	(global_label "VDDIO" (shape bidirectional) (at 114.30 237.49 90)
+		(effects (font (size 1.27 1.27)) (justify left))
+		(uuid "b1ef27f0-6ffd-4094-a341-64ee356b5f0f")
+	)
+	(global_label "GND" (shape bidirectional) (at 114.30 245.11 270)
+		(effects (font (size 1.27 1.27)) (justify right))
+		(uuid "0a3777aa-fcb1-4b1a-a76a-aeb9934e9c75")
+	)
+	(symbol (lib_id "Device:C") (at 139.70 241.30 0) (unit 1)
+		(exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+		(uuid "ca0c708a-ee6d-4380-8a68-12d9ab0c7e63")
+		(property "Reference" "C3" (at 142.24 238.76 0) (effects (font (size 1.27 1.27))))
+		(property "Value" "10u" (at 142.24 241.30 0) (effects (font (size 1.27 1.27))))
+		(property "Footprint" "Capacitor_SMD:C_0805_2012Metric" (at 139.70 241.30 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(pin "1" (uuid "36529ceb-111d-4afa-843d-e3b00970f2e2"))
+		(pin "2" (uuid "f57fd1b7-3e88-4cb5-9432-701a95739a71"))
+		(instances
+			(project "devkit_B_F28P551"
+				(path "/f18a0d56-6408-3a9a-a25e-7b7d065da837" (reference "C3") (unit 1))
+			)
+		)
+	)
+	(global_label "+5V" (shape bidirectional) (at 139.70 237.49 90)
+		(effects (font (size 1.27 1.27)) (justify left))
+		(uuid "6b542b2e-de9c-4dff-a2ff-ebb356d95104")
+	)
+	(global_label "GND" (shape bidirectional) (at 139.70 245.11 270)
+		(effects (font (size 1.27 1.27)) (justify right))
+		(uuid "2ffff2a0-81e8-4468-a1fc-37f9e753ab6a")
+	)
+	(symbol (lib_id "Device:C") (at 165.10 241.30 0) (unit 1)
+		(exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+		(uuid "a23caa0d-698e-43e1-8f58-fa2e77af58bc")
+		(property "Reference" "C4" (at 167.64 238.76 0) (effects (font (size 1.27 1.27))))
+		(property "Value" "10u" (at 167.64 241.30 0) (effects (font (size 1.27 1.27))))
+		(property "Footprint" "Capacitor_SMD:C_0805_2012Metric" (at 165.10 241.30 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(pin "1" (uuid "82abf4dc-a3ea-4dec-af98-1279756432b3"))
+		(pin "2" (uuid "5127fe31-9c3a-4896-88d1-5348d069b7a4"))
+		(instances
+			(project "devkit_B_F28P551"
+				(path "/f18a0d56-6408-3a9a-a25e-7b7d065da837" (reference "C4") (unit 1))
+			)
+		)
+	)
+	(global_label "VDDA" (shape bidirectional) (at 165.10 237.49 90)
+		(effects (font (size 1.27 1.27)) (justify left))
+		(uuid "bf25cf21-6842-488c-86b2-204361054ea7")
+	)
+	(global_label "GND" (shape bidirectional) (at 165.10 245.11 270)
+		(effects (font (size 1.27 1.27)) (justify right))
+		(uuid "3cfeedcc-1a7c-4d41-b6a4-510192389c00")
+	)
+	(symbol (lib_id "Device:C") (at 190.50 241.30 0) (unit 1)
+		(exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+		(uuid "adfb273d-edd1-451e-aa55-ff123b8e0d81")
+		(property "Reference" "C5" (at 193.04 238.76 0) (effects (font (size 1.27 1.27))))
+		(property "Value" "100n" (at 193.04 241.30 0) (effects (font (size 1.27 1.27))))
+		(property "Footprint" "Capacitor_SMD:C_0805_2012Metric" (at 190.50 241.30 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(pin "1" (uuid "cbb68509-682e-4a1e-8007-cab27ab53f32"))
+		(pin "2" (uuid "6e2b0a41-3cec-4c65-83b7-fd22825493e2"))
+		(instances
+			(project "devkit_B_F28P551"
+				(path "/f18a0d56-6408-3a9a-a25e-7b7d065da837" (reference "C5") (unit 1))
+			)
+		)
+	)
+	(global_label "VDDIO" (shape bidirectional) (at 190.50 237.49 90)
+		(effects (font (size 1.27 1.27)) (justify left))
+		(uuid "c126d362-0edf-41b5-9cd2-f5431982b742")
+	)
+	(global_label "GND" (shape bidirectional) (at 190.50 245.11 270)
+		(effects (font (size 1.27 1.27)) (justify right))
+		(uuid "a9daef79-7e23-48a9-99cc-4bae308130ed")
+	)
+	(symbol (lib_id "Device:C") (at 215.90 241.30 0) (unit 1)
+		(exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+		(uuid "c925a1b8-184c-484d-9919-1d4227e22c8b")
+		(property "Reference" "C6" (at 218.44 238.76 0) (effects (font (size 1.27 1.27))))
+		(property "Value" "100n" (at 218.44 241.30 0) (effects (font (size 1.27 1.27))))
+		(property "Footprint" "Capacitor_SMD:C_0805_2012Metric" (at 215.90 241.30 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(pin "1" (uuid "e16b9da9-ff95-4b67-bde9-e784163a911a"))
+		(pin "2" (uuid "4bda2729-0943-4296-91b3-52bb976326da"))
+		(instances
+			(project "devkit_B_F28P551"
+				(path "/f18a0d56-6408-3a9a-a25e-7b7d065da837" (reference "C6") (unit 1))
+			)
+		)
+	)
+	(global_label "VDDIO" (shape bidirectional) (at 215.90 237.49 90)
+		(effects (font (size 1.27 1.27)) (justify left))
+		(uuid "6715643f-232c-4014-9db0-ddc0e839522f")
+	)
+	(global_label "GND" (shape bidirectional) (at 215.90 245.11 270)
+		(effects (font (size 1.27 1.27)) (justify right))
+		(uuid "69603521-9ef6-487d-96c2-9a3d86f5cf59")
+	)
+	(symbol (lib_id "Device:C") (at 38.10 266.70 0) (unit 1)
+		(exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+		(uuid "939ce9f3-c42d-428c-a2ed-5d9e5b2f8fc2")
+		(property "Reference" "C7" (at 40.64 264.16 0) (effects (font (size 1.27 1.27))))
+		(property "Value" "2u2" (at 40.64 266.70 0) (effects (font (size 1.27 1.27))))
+		(property "Footprint" "Capacitor_SMD:C_0805_2012Metric" (at 38.10 266.70 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(pin "1" (uuid "03a34efd-38eb-4ce8-a140-8bd18563284c"))
+		(pin "2" (uuid "813ff1d3-8b83-48d7-a829-4f5105491c07"))
+		(instances
+			(project "devkit_B_F28P551"
+				(path "/f18a0d56-6408-3a9a-a25e-7b7d065da837" (reference "C7") (unit 1))
+			)
+		)
+	)
+	(global_label "VDDA" (shape bidirectional) (at 38.10 262.89 90)
+		(effects (font (size 1.27 1.27)) (justify left))
+		(uuid "34d9932f-2ae4-41d8-b6a5-f17749e58c5e")
+	)
+	(global_label "GND" (shape bidirectional) (at 38.10 270.51 270)
+		(effects (font (size 1.27 1.27)) (justify right))
+		(uuid "5fa575e1-1a67-478f-ac71-24002cebf921")
+	)
+	(symbol (lib_id "Device:C") (at 63.50 266.70 0) (unit 1)
+		(exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+		(uuid "944d94f9-96e8-49ed-904f-6816ec69ef99")
+		(property "Reference" "C8" (at 66.04 264.16 0) (effects (font (size 1.27 1.27))))
+		(property "Value" "100n" (at 66.04 266.70 0) (effects (font (size 1.27 1.27))))
+		(property "Footprint" "Capacitor_SMD:C_0805_2012Metric" (at 63.50 266.70 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(pin "1" (uuid "4659a50f-ae5f-4d51-8b1d-5b98955b8e90"))
+		(pin "2" (uuid "551889b9-7a73-4be1-bab5-31c91d1ceb1f"))
+		(instances
+			(project "devkit_B_F28P551"
+				(path "/f18a0d56-6408-3a9a-a25e-7b7d065da837" (reference "C8") (unit 1))
+			)
+		)
+	)
+	(global_label "VDDA" (shape bidirectional) (at 63.50 262.89 90)
+		(effects (font (size 1.27 1.27)) (justify left))
+		(uuid "c9148e0a-9212-4469-95fc-ade560d5292b")
+	)
+	(global_label "GND" (shape bidirectional) (at 63.50 270.51 270)
+		(effects (font (size 1.27 1.27)) (justify right))
+		(uuid "162c6281-6451-416a-af02-d97b764a9e65")
+	)
+	(symbol (lib_id "Device:C") (at 88.90 266.70 0) (unit 1)
+		(exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+		(uuid "0af35d72-5d61-46fe-ab80-4024bcfe4a80")
+		(property "Reference" "C9" (at 91.44 264.16 0) (effects (font (size 1.27 1.27))))
+		(property "Value" "100n" (at 91.44 266.70 0) (effects (font (size 1.27 1.27))))
+		(property "Footprint" "Capacitor_SMD:C_0805_2012Metric" (at 88.90 266.70 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(pin "1" (uuid "6f996c89-5c14-4821-8c73-24097815265f"))
+		(pin "2" (uuid "9a9f950e-f73b-42db-a30f-ac25cb89d724"))
+		(instances
+			(project "devkit_B_F28P551"
+				(path "/f18a0d56-6408-3a9a-a25e-7b7d065da837" (reference "C9") (unit 1))
+			)
+		)
+	)
+	(global_label "VDD_CORE" (shape bidirectional) (at 88.90 262.89 90)
+		(effects (font (size 1.27 1.27)) (justify left))
+		(uuid "ce3c11ce-36f5-484c-8678-0ddf2b27956d")
+	)
+	(global_label "GND" (shape bidirectional) (at 88.90 270.51 270)
+		(effects (font (size 1.27 1.27)) (justify right))
+		(uuid "dd9a1ac6-1b38-4c5e-811b-c6cce7dfab16")
+	)
+	(symbol (lib_id "Device:C") (at 114.30 266.70 0) (unit 1)
+		(exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+		(uuid "e65c64b6-73c9-4758-91d8-da3e649188dd")
+		(property "Reference" "C10" (at 116.84 264.16 0) (effects (font (size 1.27 1.27))))
+		(property "Value" "100n" (at 116.84 266.70 0) (effects (font (size 1.27 1.27))))
+		(property "Footprint" "Capacitor_SMD:C_0805_2012Metric" (at 114.30 266.70 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(pin "1" (uuid "22916293-7189-428b-8fb2-c16aae38eb16"))
+		(pin "2" (uuid "39413d37-35fc-4c63-bbec-dec369349b2e"))
+		(instances
+			(project "devkit_B_F28P551"
+				(path "/f18a0d56-6408-3a9a-a25e-7b7d065da837" (reference "C10") (unit 1))
+			)
+		)
+	)
+	(global_label "VDD_CORE" (shape bidirectional) (at 114.30 262.89 90)
+		(effects (font (size 1.27 1.27)) (justify left))
+		(uuid "359f0582-544d-4dfe-92fe-c0b2d5e21af6")
+	)
+	(global_label "GND" (shape bidirectional) (at 114.30 270.51 270)
+		(effects (font (size 1.27 1.27)) (justify right))
+		(uuid "fe42ad8f-750f-4607-9ab3-50d879f4d439")
+	)
+	(symbol (lib_id "Device:C") (at 139.70 266.70 0) (unit 1)
+		(exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+		(uuid "a87ed65c-f8ca-4cb1-a32a-48a17ecccebc")
+		(property "Reference" "C11" (at 142.24 264.16 0) (effects (font (size 1.27 1.27))))
+		(property "Value" "100n" (at 142.24 266.70 0) (effects (font (size 1.27 1.27))))
+		(property "Footprint" "Capacitor_SMD:C_0805_2012Metric" (at 139.70 266.70 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(pin "1" (uuid "7ba4f9a5-eb67-4750-a028-f52d7e109e84"))
+		(pin "2" (uuid "6f11db19-fd28-49a1-89a2-4b2093996180"))
+		(instances
+			(project "devkit_B_F28P551"
+				(path "/f18a0d56-6408-3a9a-a25e-7b7d065da837" (reference "C11") (unit 1))
+			)
+		)
+	)
+	(global_label "VDD_CORE" (shape bidirectional) (at 139.70 262.89 90)
+		(effects (font (size 1.27 1.27)) (justify left))
+		(uuid "a6ac8674-7c62-4554-9580-9bfb8034fe6b")
+	)
+	(global_label "GND" (shape bidirectional) (at 139.70 270.51 270)
+		(effects (font (size 1.27 1.27)) (justify right))
+		(uuid "790a3990-c947-4f2f-be9f-f4f9eca1c934")
+	)
+	(symbol (lib_id "Device:C") (at 165.10 266.70 0) (unit 1)
+		(exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+		(uuid "0bcaec3c-91e6-4dd2-92c1-7f2d00b9c77e")
+		(property "Reference" "C12" (at 167.64 264.16 0) (effects (font (size 1.27 1.27))))
+		(property "Value" "10u" (at 167.64 266.70 0) (effects (font (size 1.27 1.27))))
+		(property "Footprint" "Capacitor_SMD:C_0805_2012Metric" (at 165.10 266.70 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(pin "1" (uuid "8d4cc376-655b-4493-812c-9216b066f556"))
+		(pin "2" (uuid "4a0e26b2-95b6-4e2a-a0ab-12cf85265e26"))
+		(instances
+			(project "devkit_B_F28P551"
+				(path "/f18a0d56-6408-3a9a-a25e-7b7d065da837" (reference "C12") (unit 1))
+			)
+		)
+	)
+	(global_label "VDD_CORE" (shape bidirectional) (at 165.10 262.89 90)
+		(effects (font (size 1.27 1.27)) (justify left))
+		(uuid "7cf6802c-ce8a-4572-a78f-96b8a0005b59")
+	)
+	(global_label "GND" (shape bidirectional) (at 165.10 270.51 270)
+		(effects (font (size 1.27 1.27)) (justify right))
+		(uuid "8d5c57ff-fba1-44a6-aeac-64b17494e705")
+	)
+	(symbol (lib_id "Device:C") (at 190.50 266.70 0) (unit 1)
+		(exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+		(uuid "aa8a0fd2-3f11-425f-a987-4d620bdf8a88")
+		(property "Reference" "C13" (at 193.04 264.16 0) (effects (font (size 1.27 1.27))))
+		(property "Value" "2u2" (at 193.04 266.70 0) (effects (font (size 1.27 1.27))))
+		(property "Footprint" "Capacitor_SMD:C_0805_2012Metric" (at 190.50 266.70 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(pin "1" (uuid "a6b0a012-aa2c-4dfe-8eb8-6337362feaf0"))
+		(pin "2" (uuid "41f1dbc2-6360-47e2-b61e-54aba14968f5"))
+		(instances
+			(project "devkit_B_F28P551"
+				(path "/f18a0d56-6408-3a9a-a25e-7b7d065da837" (reference "C13") (unit 1))
+			)
+		)
+	)
+	(global_label "VREF_ADC" (shape bidirectional) (at 190.50 262.89 90)
+		(effects (font (size 1.27 1.27)) (justify left))
+		(uuid "64088e3a-6bbd-4646-b7c1-c15d3bffaeb5")
+	)
+	(global_label "VREFLO_SENSE" (shape bidirectional) (at 190.50 270.51 270)
+		(effects (font (size 1.27 1.27)) (justify right))
+		(uuid "750421b6-229f-401f-8e3d-b92ec0b9eddd")
+	)
+	(symbol (lib_id "Device:R") (at 215.90 266.70 0) (unit 1)
+		(exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+		(uuid "cfeb1b43-5694-4c67-81b6-c2b0dcfd8250")
+		(property "Reference" "R2" (at 218.44 264.16 0) (effects (font (size 1.27 1.27))))
+		(property "Value" "10k" (at 218.44 266.70 0) (effects (font (size 1.27 1.27))))
+		(property "Footprint" "Resistor_SMD:R_0805_2012Metric" (at 215.90 266.70 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(pin "1" (uuid "48cccb40-210d-4eb7-956b-1541c9952237"))
+		(pin "2" (uuid "134f8946-695d-432d-956b-a310784dec88"))
+		(instances
+			(project "devkit_B_F28P551"
+				(path "/f18a0d56-6408-3a9a-a25e-7b7d065da837" (reference "R2") (unit 1))
+			)
+		)
+	)
+	(global_label "~{nRESET}" (shape bidirectional) (at 215.90 262.89 90)
+		(effects (font (size 1.27 1.27)) (justify left))
+		(uuid "c408647b-e4d2-4717-bf5d-4e80883f6e24")
+	)
+	(global_label "VDDIO" (shape bidirectional) (at 215.90 270.51 270)
+		(effects (font (size 1.27 1.27)) (justify right))
+		(uuid "cccf9d5c-f3d4-4a40-9e04-1b9d72dab28e")
+	)
+	(symbol (lib_id "Device:C") (at 38.10 292.10 0) (unit 1)
+		(exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+		(uuid "a9edcd9f-cf09-4ab9-b14e-efca394d43f7")
+		(property "Reference" "C14" (at 40.64 289.56 0) (effects (font (size 1.27 1.27))))
+		(property "Value" "100n" (at 40.64 292.10 0) (effects (font (size 1.27 1.27))))
+		(property "Footprint" "Capacitor_SMD:C_0805_2012Metric" (at 38.10 292.10 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(pin "1" (uuid "f301f1c8-d68b-4674-b11c-6eb6a8d0c416"))
+		(pin "2" (uuid "a9668cef-b700-4e71-8a93-4b92685550b6"))
+		(instances
+			(project "devkit_B_F28P551"
+				(path "/f18a0d56-6408-3a9a-a25e-7b7d065da837" (reference "C14") (unit 1))
+			)
+		)
+	)
+	(global_label "~{nRESET}" (shape bidirectional) (at 38.10 288.29 90)
+		(effects (font (size 1.27 1.27)) (justify left))
+		(uuid "9fab2119-0c32-4c05-ab05-1651b05ce042")
+	)
+	(global_label "GND" (shape bidirectional) (at 38.10 295.91 270)
+		(effects (font (size 1.27 1.27)) (justify right))
+		(uuid "172808e1-a237-4511-a6bb-6b24d601ed9b")
+	)
+	(symbol (lib_id "Connector_Generic:Conn_01x02") (at 63.50 292.10 0) (unit 1)
+		(exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+		(uuid "96daf316-60e4-461c-be23-f0e604a7d55f")
+		(property "Reference" "J4" (at 66.04 289.56 0) (effects (font (size 1.27 1.27))))
+		(property "Value" "RESET" (at 66.04 292.10 0) (effects (font (size 1.27 1.27))))
+		(property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical" (at 63.50 292.10 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(pin "1" (uuid "79021a40-8649-45c7-9978-710160f402a7"))
+		(pin "2" (uuid "c60f6e01-c43d-4952-98e4-fe847dcf9c44"))
+		(instances
+			(project "devkit_B_F28P551"
+				(path "/f18a0d56-6408-3a9a-a25e-7b7d065da837" (reference "J4") (unit 1))
+			)
+		)
+	)
+	(global_label "~{nRESET}" (shape bidirectional) (at 58.42 292.10 180)
+		(effects (font (size 1.27 1.27)) (justify right))
+		(uuid "a5f3863a-e67f-4099-874b-cc99abca10a7")
+	)
+	(global_label "GND" (shape bidirectional) (at 58.42 294.64 180)
+		(effects (font (size 1.27 1.27)) (justify right))
+		(uuid "7ad3545b-d0a9-4b75-9e60-3eada6706add")
+	)
+	(symbol (lib_id "Device:R") (at 88.90 292.10 0) (unit 1)
+		(exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+		(uuid "bb219d52-8664-424a-8798-0419114f77eb")
+		(property "Reference" "R1" (at 91.44 289.56 0) (effects (font (size 1.27 1.27))))
+		(property "Value" "2k2" (at 91.44 292.10 0) (effects (font (size 1.27 1.27))))
+		(property "Footprint" "Resistor_SMD:R_0805_2012Metric" (at 88.90 292.10 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(pin "1" (uuid "87fa53e0-170f-4e48-8507-55029f896531"))
+		(pin "2" (uuid "ed17e0a5-89d2-46af-ab80-73be60187d96"))
+		(instances
+			(project "devkit_B_F28P551"
+				(path "/f18a0d56-6408-3a9a-a25e-7b7d065da837" (reference "R1") (unit 1))
+			)
+		)
+	)
+	(global_label "JTAG_TMS" (shape bidirectional) (at 88.90 288.29 90)
+		(effects (font (size 1.27 1.27)) (justify left))
+		(uuid "84b01d7e-9b8e-4468-bfc9-785b2b5749f0")
+	)
+	(global_label "VDDIO" (shape bidirectional) (at 88.90 295.91 270)
+		(effects (font (size 1.27 1.27)) (justify right))
+		(uuid "a11fb3c2-ee84-47c5-a3f8-c522680ecf43")
+	)
+	(symbol (lib_id "Device:R") (at 114.30 292.10 0) (unit 1)
+		(exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+		(uuid "bc0bc594-c0f6-48f3-9cb1-0a12fb156552")
+		(property "Reference" "R3" (at 116.84 289.56 0) (effects (font (size 1.27 1.27))))
+		(property "Value" "10k" (at 116.84 292.10 0) (effects (font (size 1.27 1.27))))
+		(property "Footprint" "Resistor_SMD:R_0805_2012Metric" (at 114.30 292.10 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(pin "1" (uuid "f192a373-0fb4-4cb6-82f5-3f46593329b6"))
+		(pin "2" (uuid "a07806e2-6900-4fd1-b3ba-0da4569b9b04"))
+		(instances
+			(project "devkit_B_F28P551"
+				(path "/f18a0d56-6408-3a9a-a25e-7b7d065da837" (reference "R3") (unit 1))
+			)
+		)
+	)
+	(global_label "BOOT_SEL" (shape bidirectional) (at 114.30 288.29 90)
+		(effects (font (size 1.27 1.27)) (justify left))
+		(uuid "2e8e25df-bfe3-4f2b-8a94-6fcd4aaa13b1")
+	)
+	(global_label "VDDIO" (shape bidirectional) (at 114.30 295.91 270)
+		(effects (font (size 1.27 1.27)) (justify right))
+		(uuid "aa418593-a5ce-4c97-a7a9-506d0e793d6d")
+	)
+	(symbol (lib_id "Device:R") (at 139.70 292.10 0) (unit 1)
+		(exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+		(uuid "c57e7a12-31e6-40c9-8379-c5b83d132038")
+		(property "Reference" "R4" (at 142.24 289.56 0) (effects (font (size 1.27 1.27))))
+		(property "Value" "10k" (at 142.24 292.10 0) (effects (font (size 1.27 1.27))))
+		(property "Footprint" "Resistor_SMD:R_0805_2012Metric" (at 139.70 292.10 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(pin "1" (uuid "329c34e6-48db-4dda-94e9-35dc9ecac587"))
+		(pin "2" (uuid "110ad0f9-8229-4466-b458-b144961dcdec"))
+		(instances
+			(project "devkit_B_F28P551"
+				(path "/f18a0d56-6408-3a9a-a25e-7b7d065da837" (reference "R4") (unit 1))
+			)
+		)
+	)
+	(global_label "TP_GPIO32" (shape bidirectional) (at 139.70 288.29 90)
+		(effects (font (size 1.27 1.27)) (justify left))
+		(uuid "483a9c8e-a531-4bc9-8b32-e0c1795a080a")
+	)
+	(global_label "VDDIO" (shape bidirectional) (at 139.70 295.91 270)
+		(effects (font (size 1.27 1.27)) (justify right))
+		(uuid "bfa97a81-cfcf-4329-a720-629e038d8f8d")
+	)
+	(symbol (lib_id "Device:LED_Dual_AKA") (at 165.10 292.10 0) (unit 1)
+		(exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+		(uuid "d454bb69-3acc-4c1e-b2d8-8d0fb95c2fbc")
+		(property "Reference" "D1" (at 167.64 289.56 0) (effects (font (size 1.27 1.27))))
+		(property "Value" "LED_BICOLORE_3MM" (at 167.64 292.10 0) (effects (font (size 1.27 1.27))))
+		(property "Footprint" "LED_THT:LED_D3.0mm-3" (at 165.10 292.10 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(pin "1" (uuid "c2b57759-973e-46e4-a5c5-4a3ebe8a81be"))
+		(pin "2" (uuid "3df999be-11a7-4f28-8d63-b7a2c777d9ee"))
+		(pin "3" (uuid "64162cc3-33f7-4782-aaf7-b78a370f352c"))
+		(instances
+			(project "devkit_B_F28P551"
+				(path "/f18a0d56-6408-3a9a-a25e-7b7d065da837" (reference "D1") (unit 1))
+			)
+		)
+	)
+	(global_label "LED_B" (shape bidirectional) (at 172.72 289.56 0)
+		(effects (font (size 1.27 1.27)) (justify left))
+		(uuid "786f5ac8-eb53-4542-a776-f80e15bbba51")
+	)
+	(global_label "LED_K" (shape bidirectional) (at 157.48 292.10 180)
+		(effects (font (size 1.27 1.27)) (justify right))
+		(uuid "bc6b98d8-ca29-4a26-aa6e-62e529798589")
+	)
+	(global_label "LED_R" (shape bidirectional) (at 172.72 294.64 0)
+		(effects (font (size 1.27 1.27)) (justify left))
+		(uuid "590f8820-5291-4b43-9f89-04aa1d0d780b")
+	)
+	(symbol (lib_id "Device:R") (at 190.50 292.10 0) (unit 1)
+		(exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
+		(uuid "45e355ab-09b2-4520-8572-dc9478590b7b")
+		(property "Reference" "R5" (at 193.04 289.56 0) (effects (font (size 1.27 1.27))))
+		(property "Value" "1k" (at 193.04 292.10 0) (effects (font (size 1.27 1.27))))
+		(property "Footprint" "Resistor_SMD:R_0805_2012Metric" (at 190.50 292.10 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(pin "1" (uuid "1ce432b6-acf2-497c-9326-3efbf25343e3"))
+		(pin "2" (uuid "24d9c4c5-e872-4312-977f-5dfcca339c88"))
+		(instances
+			(project "devkit_B_F28P551"
+				(path "/f18a0d56-6408-3a9a-a25e-7b7d065da837" (reference "R5") (unit 1))
+			)
+		)
+	)
+	(global_label "LED_K" (shape bidirectional) (at 190.50 288.29 90)
+		(effects (font (size 1.27 1.27)) (justify left))
+		(uuid "79ed3100-9d5d-426f-91fa-66ae62c20c1e")
+	)
+	(global_label "GND" (shape bidirectional) (at 190.50 295.91 270)
+		(effects (font (size 1.27 1.27)) (justify right))
+		(uuid "2204048a-94d5-481a-beff-1f93736a753d")
+	)
 )

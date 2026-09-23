@@ -100,8 +100,10 @@ BOM = [
     ("R5", R, "1k", FP_R, {"1": "LED_K", "2": "GND"}),
 ]
 
-# Zone libre de la feuille A2, sous les connecteurs et le MCU.
-ORIGIN = (40.0, 240.0)
+# Zone libre de la feuille A2, sous les connecteurs et le MCU. Les coordonnees
+# doivent etre des multiples de 1,27 mm : sinon chaque broche tombe hors grille
+# et l'ERC leve un endpoint_off_grid par composant pose.
+ORIGIN = (38.10, 241.30)   # 30 et 190 pas de 1,27
 STEP_X = 25.4
 STEP_Y = 25.4
 PER_ROW = 8
@@ -130,6 +132,28 @@ def _raw_symbol(text, name):
     return sexp_block(text, m.start())
 
 
+def _properties(block):
+    """[(nom, texte_du_bloc)] des proprietes de premier niveau du symbole."""
+    out = []
+    for m in re.finditer(r'\n(\t+)\(property "([^"]+)"', block):
+        out.append((m.group(2), sexp_block(block, m.start() + 1)))
+    return out
+
+
+def _replace_properties(block, props):
+    """Remplace les proprietes du bloc par celles fournies, nom pour nom."""
+    by_name = dict(props)
+    out, pos = [], 0
+    for m in re.finditer(r'\n(\t+)\(property "([^"]+)"', block):
+        start = m.start() + 1
+        old = sexp_block(block, start)
+        out.append(block[pos:start])
+        out.append(by_name.get(m.group(2), old))
+        pos = start + len(old)
+    out.append(block[pos:])
+    return "".join(out)
+
+
 def lib_symbol(lib_id):
     """Bloc de definition du symbole, prefixe par son nickname.
 
@@ -148,6 +172,7 @@ def lib_symbol(lib_id):
     # « echec du chargement ».
     ancestry = [name]
     block = _raw_symbol(text, name)
+    own_props = _properties(block)
     m = re.search(r'\(extends "([^"]+)"', block)
     while m:
         parent = m.group(1)
@@ -157,10 +182,20 @@ def lib_symbol(lib_id):
         block = _raw_symbol(text, parent)
         m = re.search(r'\(extends "([^"]+)"', block)
 
-    # Le bloc est celui de l'ancetre : le renommer au nom demande, lui et
-    # toutes ses sous-unites.
+    # Une variante n'herite que de la geometrie : ses propres proprietes
+    # (Value, Datasheet, Description...) l'emportent. Sans ce report, le bloc
+    # pose dans le schema differe de celui que KiCad calcule a l'ouverture, et
+    # l'ERC leve lib_symbol_mismatch sur chaque instance.
+    if len(ancestry) > 1 and own_props:
+        block = _replace_properties(block, own_props)
+
+    # Renommage au nom demande. Attention au piege : dans un schema, seul le
+    # symbole de premier niveau porte le prefixe de librairie. Ses sous-unites
+    # gardent le nom NU — "TC2050_1_1", pas "Connector:TC2050_1_1". Les
+    # prefixer aussi produit un fichier que KiCad refuse de charger, sans
+    # autre diagnostic qu'un « echec du chargement ».
     root = ancestry[-1]
-    block = block.replace('(symbol "%s_' % root, '(symbol "%s_' % lib_id)
+    block = block.replace('(symbol "%s_' % root, '(symbol "%s_' % name)
     block = block.replace('(symbol "%s"' % root, '(symbol "%s"' % lib_id, 1)
     # La valeur affichee doit rester celle de la variante, pas de l'ancetre.
     block = re.sub(r'(\(property "Value" ")[^"]*(")',
@@ -280,17 +315,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-# ETAT : NE PAS UTILISER EN L'ETAT.
-#
-# Le script calcule juste — brochages resolus depuis les librairies, heritage
-# (extends) traite, parentheses equilibrees, 23 composants et leurs etiquettes
-# aux bonnes coordonnees. Mais le fichier produit ne se charge pas dans KiCad,
-# et l'echec vient de l'insertion des blocs (lib_symbols), pas des instances :
-# inserer la seule definition de Device:R, sans aucune instance, suffit a le
-# reproduire. Teste sur un schema au format KiCad 8 et sur un au format
-# KiCad 10 : meme resultat, ce n'est donc pas une histoire de version.
-#
-# Piste suivante : ne pas recopier les blocs a la main, mais laisser KiCad les
-# ecrire — poser les composants via kipy sur l'instance ouverte, comme le
-# CLAUDE.md l'impose deja pour les PCB.
